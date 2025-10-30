@@ -1,1 +1,96 @@
-<p>ld-view-event works!</p>
+<div class="page-root">
+    <header class="topbar">
+        <div class="brand">Collect Requirements</div>
+        <div class="user">User</div>
+    </header>
+
+    <main class="content">
+        <div *ngIf="loading" class="loading">Loading event details...</div>
+        <div *ngIf="error" class="error">{{ error }}</div>
+
+        <section class="card" *ngIf="event && !loading">
+            <h2 class="card-title">Event details</h2>
+            <div class="event-grid">
+                <div class="grid-row">
+                    <div class="label-pill">Event ID</div>
+                    <div class="value-box">{{ event.eventId }}</div>
+                </div>
+
+                <div class="grid-row">
+                    <div class="label-pill">Event Name</div>
+                    <div class="value-box">{{ event.eventName }}</div>
+                </div>
+
+                <div class="grid-row">
+                    <div class="label-pill">Description</div>
+                    <div class="value-box description">{{ event.description || '-' }}</div>
+                </div>
+
+                <div class="grid-row">
+                    <div class="label-pill">Participants</div>
+                    <div class="value-box">{{ event.participantsCount ?? '-' }}</div>
+                </div>
+
+                <div class="grid-row">
+                    <div class="label-pill">Duration</div>
+                    <div class="value-box">{{ event.duration || '-' }}</div>
+                </div>
+
+                <div class="grid-row">
+                    <div class="label-pill">Event Type</div>
+                    <div class="value-box">{{ event.eventType || '-' }}</div>
+                </div>
+
+                <div class="grid-row">
+                    <div class="label-pill">Funding Source</div>
+                    <div class="value-box">{{ event.fundingSource || '-' }}</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="card requests" *ngIf="!loading">
+            <h3 class="card-title">Related Requests</h3>
+
+            <div *ngIf="requests.length === 0" class="empty">No requests found for this event.</div>
+
+            <div class="table-wrap" *ngIf="requests.length > 0">
+                <table class="requests-table">
+                    <thead>
+                        <tr>
+                            <th>Req ID</th>
+                            <th>Requestor</th>
+                            <th>Department</th>
+                            <th>Request Date</th>
+                            <th>Status</th>
+                            <th>Group</th>
+                            <th>Justification</th>
+                            <th>Associates</th>
+                            <th>TAN</th>
+                            <th>Curriculum</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let r of requests">
+                            <td>{{r.requestId }}</td>
+                            <td>{{r.requestorId || '-' }}</td>
+                            <td>{{ r.departmentName || r.departmentId || '-' }}</td>
+                            <td>{{ r.requestDate | date:'medium' }}</td>
+                            <td>{{ r.requestStatus }}</td>
+                            <td>{{ r.groupRequest ? 'Yes' : 'No' }}</td>
+                            <td class="nowrap">{{ r.justification }}</td>
+                            <td class="center">{{ r.noOfAssociates ?? '-' }}</td>
+                            <td>{{ r.tanNumber }}</td>
+                            <td>{{ r.curriculumLink || '-' }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <div class="button-container">
+            <button class="edit-event-button" (click)="navigateToEditEvent()">Edit Event</button>
+        </div>
+    </main>
+
+    <footer class="page-footer">Footer</footer>
+</div>
