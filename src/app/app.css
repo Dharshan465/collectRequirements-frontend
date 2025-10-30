@@ -1,0 +1,13 @@
+
+
+#app-content {
+  flex-grow: 1; /* Allows the main content area to fill available space */
+  overflow-y: auto; /* Enables vertical scrolling for this section if content overflows */
+  padding-top: 90px; /* Offset for the fixed header's height (40px logo + 30px padding + 20px buffer) */
+  padding-left: 10px !important; /* Further reduced horizontal padding for more screen width */
+  padding-right: 10px !important; /* Further reduced horizontal padding for more screen width */
+  padding-bottom: 20px; /* Small padding before footer */
+  box-sizing: border-box; /* Ensures padding is included in the element's total width and height */
+}
+
+
