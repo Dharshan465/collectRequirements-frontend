@@ -1,0 +1,116 @@
+.app-header {
+  background-color: #040c5c; /* Dark blue background, matching your image */
+  color: #ffffff; /* White text */
+  padding: 15px 30px; /* Vertical and horizontal padding */
+  display: flex;
+  justify-content: space-between; /* Pushes left and right sections apart */
+  align-items: center; /* Vertically centers items */
+  position: fixed; /* Keeps the header at the top */
+  top: 0;
+  left: 0;
+  width: 100%;
+  box-sizing: border-box; /* Ensures padding is included in the width */
+  z-index: 1000; /* Ensures the header stays on top of other content */
+  font-family: Arial, sans-serif; /* Generic fallback font */
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+}
+
+.ford-logo {
+  height: 40px; /* Adjust logo height as needed */
+  margin-right: 15px; /* Space between logo and text */
+}
+
+.app-text {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+}
+
+.user-dropdown-container {
+  position: relative; /* Crucial for positioning the dropdown menu relative to this container */
+  display: inline-block; /* Allows the container to wrap its content */
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  cursor: pointer; /* Indicates clickable element */
+  padding: 8px 12px;
+  border-radius: 5px;
+  transition: background-color 0.3s ease; /* Smooth hover effect */
+  user-select: none; /* Prevent text selection on click */
+  background: none; /* Remove default button background */
+  border: 2px solid transparent; /* Transparent border for consistent sizing */
+  border-color: #ffffff;
+  color: inherit; /* Inherit text color from parent */
+  font-family: inherit; /* Inherit font family */
+}
+
+.user-info:hover {
+  background-color: rgba(255, 255, 255, 0.1); /* Subtle hover background */
+}
+
+.user-icon {
+  font-size: 20px; /* Size for the placeholder user icon */
+  margin-right: 8px;
+  line-height: 1; /* Helps with vertical alignment of the icon */
+}
+
+.user-info span:nth-child(2) { /* Styles for "Hi, Username" text */
+  font-size: 16px;
+  margin-right: 8px;
+}
+
+.dropdown-arrow {
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 5px solid #ffffff; /* Creates a white down-pointing arrow */
+  margin-left: 5px;
+  transition: transform 0.2s ease-in-out; /* Smooth rotation */
+}
+
+.dropdown-arrow.rotated {
+  transform: rotate(180deg); /* Rotates the arrow to point up when dropdown is open */
+}
+
+/* Styles for the dropdown menu itself */
+.dropdown-menu {
+  position: absolute;
+  top: 100%; /* Positions the menu directly below the user-info */
+  right: 0; /* Aligns the menu to the right edge of the user-info */
+  background-color: #030944; /* Slightly lighter dark blue for the dropdown background */
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); /* Soft shadow for depth */
+  z-index: 1001; /* Ensures the dropdown appears above other content, higher than header */
+  border-radius: 4px; /* Slightly rounded corners */
+  overflow: hidden; /* Ensures content respects border-radius */
+  margin-top: 5px; /* Small gap between user-info and dropdown */
+}
+
+.dropdown-item {
+  color: #ffffff;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block; /* Makes each item take full width */
+  background-color: transparent;
+  border: none; /* Removes default button border */
+  width: 100%;
+  text-align: left; /* Aligns text to the left */
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.2s ease; /* Smooth hover effect */
+}
+
+.dropdown-item:hover {
+  background-color: rgba(255, 255, 255, 0.1); /* Hover effect for dropdown items */
+}

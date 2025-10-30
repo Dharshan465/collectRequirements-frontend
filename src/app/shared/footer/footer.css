@@ -1,0 +1,49 @@
+.app-footer {
+  background-color:#040c5c; /* Dark blue background, same as header */
+  color: #ffffff; /* White text */
+  padding: 15px 30px; /* Vertical and horizontal padding */
+  display: flex;
+  justify-content: space-between; /* Pushes content and button apart */
+  align-items: center; /* Vertically centers items */
+  width: 100%;
+  box-sizing: border-box; /* Ensures padding is included in the width */
+  font-family: Arial, sans-serif; /* Generic fallback font */
+  font-size: 14px; /* Slightly smaller font for footer text */
+  margin-top: auto; /* This is crucial for pushing the footer to the bottom of the flex container */
+}
+
+.footer-content {
+  max-width: 80%; /* Prevents text from overlapping the button too much on smaller screens */
+}
+
+.scroll-to-top {
+  background-color: transparent;
+  border: 2px solid #ffffff; /* White border for the circular button */
+  border-radius: 50%; /* Makes the button circular */
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.scroll-to-top:hover {
+  background-color: rgba(255, 255, 255, 0.1); /* Subtle hover background */
+}
+
+.arrow-up {
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-bottom: 6px solid #ffffff; /* Creates a white up-pointing arrow */
+}
+.scroll-to-top:focus {
+  outline: none; /* Removes default focus outline */
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.5); /* Adds a custom focus ring */
+}
+
+
+

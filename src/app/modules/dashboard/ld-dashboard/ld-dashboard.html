@@ -1,1 +1,131 @@
-<p>ld-dashboard works!</p>
+<div class="dashboard-container">
+    <header class="dashboard-header">
+      <h1>Learning & Development Dashboard</h1>
+        <section class="action-buttons">
+    <button class="new-requirement-button" (click)="navigateToNewRequirement()">New Requirement</button>
+  </section>
+
+    </header>
+
+   <section class="request-counts-cards">
+    <div class="card">
+      <h3>Total Submitted Requests</h3>
+      <p>{{ requestCounts.totalSubmitted ?? 0 }}</p>
+    </div>
+    <div class="card">
+      <h3>Approved Requests</h3>
+      <p>{{ requestCounts.approved ?? 0 }}</p>
+    </div>
+    <div class="card">
+      <h3>Pending Requests</h3>
+      <p>{{ requestCounts.pending ?? 0 }}</p>
+    </div>
+    <div class="card">
+      <h3>Closed Requests</h3>
+      <p>{{ requestCounts.closed ?? 0 }}</p>
+    </div>
+  </section>
+
+<section class="request-filters">
+
+    <div class="filter-group">
+    <label for="filterRequestorName">Requestor Name:</label>
+    <select id="filterRequestorName" [(ngModel)]="filterRequestorName">
+      <option value="">-- Select Requestor Name --</option>
+      <option *ngFor="let name of availableRequestorNames" [value]="name">{{ name }}</option>
+    </select>
+  </div>
+
+
+  <div class="filter-group">
+    <label for="filterStatus">Status:</label>
+    <select id="filterStatus" [(ngModel)]="filterStatus">
+      <option value="">-- Select Status --</option>
+      <option *ngFor="let status of availableStatuses" [value]="status">{{ status }}</option>
+    </select>
+  </div>
+
+    <div class="filter-group">
+    <label for="filterDepartmentName">Department:</label>
+    <select id="filterDepartmentName" [(ngModel)]="filterDepartmentName">
+      <option value="">-- Select Department --</option>
+      <option *ngFor="let dept of availableDepartments" [value]="dept">{{ dept }}</option>
+    </select>
+  </div>
+
+   <div class="filter-group">
+    <label for="filterEventName">Event:</label>
+    <select id="filterEventName" [(ngModel)]="filterEventName">
+      <option value="">-- Select Event --</option>
+      <option *ngFor="let event of availableEvents" [value]="event">{{ event }}</option>
+    </select>
+  </div>
+
+
+  <div class="filter-group">
+    <label for="filterFromDate">From Date:</label>
+    <input type="date" id="filterFromDate" [(ngModel)]="filterFromDate">
+  </div>
+
+ 
+
+  <div class="filter-group">
+    <label for="filterToDate">To Date:</label>
+    <input type="date" id="filterToDate" [(ngModel)]="filterToDate">
+  </div>
+
+
+
+  <div class="filter-buttons">
+    <button id="applyFilters" (click)="loadRequests()">Apply Filters</button>
+    <button id="clearFilters" (click)="clear()">Clear</button>
+  </div>
+</section>
+
+
+  <span id="request-counts">Total Requests: {{ requestDetails.length }}</span>
+  <section class="requests-table">
+    <table>
+      <thead>
+        <tr>
+          <th>Request ID</th>
+          <th>Requestor Name</th>
+          <th>Department</th>
+          <th>Event</th>
+          <th>Date</th>
+          <th>Group Request</th>
+          <th>Status</th>
+          <th>Participant Count</th>
+          <th>TAN</th>
+          <th>Curriculum</th>
+          <th>Actions</th>
+
+      </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let request of requestDetails">
+        <td>{{ request.requestId }}</td>
+        <td>{{ request.requestorName }}</td>
+        <td>{{ request.departmentName }}</td>
+        <td>{{ request.eventName || 'Not Assigned' }}</td>
+        <td>{{ request.requestDate | date }}</td>
+        <td>{{ request.groupRequest ? 'Yes' : 'No' }}</td>
+        <td>{{ request.requestStatus }}</td>
+        <td>{{ request.noOfParticipants }}</td>
+        <td>{{ request.tanNumber }}</td>
+        <td>{{ request.curriculumLink }}</td>
+        <td class="action-buttons-cell">
+            <button class="action-btn edit-btn" (click)="onEdit(request.requestId)">Edit</button>
+            <button class="action-btn view-btn" (click)="onView(request.requestId)">View</button>
+            <button class="action-btn delete-btn" (click)="onDelete(request.requestId)">Delete</button>
+          </td>
+
+      </tr>
+        <tr *ngIf="requestDetails.length === 0">
+            <td colspan="11" class="no-data">No requests found.</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+</div>

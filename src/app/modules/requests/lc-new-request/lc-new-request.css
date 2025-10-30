@@ -1,0 +1,266 @@
+.new-requirement-container {
+  font-family: Arial, sans-serif;
+  padding: 20px;
+  max-width: 1000px;
+  margin: 0 auto;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.form-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 10px;
+}
+
+.form-header h1 {
+  margin: 0;
+  color: #333;
+}
+
+.back-button {
+  padding: 8px 15px;
+  background-color: #6c757d;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.9em;
+}
+
+.back-button:hover {
+  background-color: #5a6268;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #555;
+}
+
+.form-group input[type="text"],
+.form-group input[type="url"],
+.form-group textarea {
+  width: calc(100% - 22px); /* Account for padding and border */
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.form-group textarea {
+  min-height: 80px;
+  resize: vertical;
+}
+
+.checkbox-group {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+  flex-wrap: wrap; /* Allow wrapping for the note */
+}
+
+.checkbox-group input[type="checkbox"] {
+  margin-right: 10px;
+  width: 18px;
+  height: 18px;
+}
+
+.auto-update-note {
+  color: #666;
+  font-size: 0.85em;
+  font-style: italic;
+  margin-left: 10px;
+  margin-top: 5px;
+}
+
+.participant-selection .participant-input-group {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.participant-selection .participant-input-group input {
+  flex-grow: 1;
+}
+
+.participant-selection .participant-input-group button {
+  padding: 8px 15px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.participant-selection .participant-input-group button:hover {
+  background-color: #0056b3;
+}
+
+.selected-participants {
+  border: 1px solid #eee;
+  padding: 10px;
+  border-radius: 4px;
+  min-height: 50px;
+  background-color: #f9f9f9;
+}
+
+.no-participants {
+  color: #999;
+  font-style: italic;
+}
+
+.participant-tag {
+  display: inline-flex;
+  align-items: center;
+  background-color: #e0e0e0;
+  border-radius: 15px;
+  padding: 5px 10px;
+  margin: 5px;
+  font-size: 0.9em;
+}
+
+.participant-tag button {
+  background: none;
+  border: none;
+  color: #777;
+  margin-left: 8px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.participant-tag button:hover {
+  color: #333;
+}
+
+.submit-button {
+  width: 100%;
+  padding: 12px;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1.1em;
+  margin-top: 20px;
+}
+
+.submit-button:hover:not(:disabled) {
+  background-color: #218838;
+}
+
+.submit-button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+.form-footer {
+  text-align: center;
+  margin-top: 30px;
+  padding-top: 15px;
+  border-top: 1px solid #eee;
+  color: #777;
+  font-size: 0.9em;
+}
+
+/* ... (existing styles) ... */
+
+.select-participants-button {
+  padding: 8px 15px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+
+.select-participants-button:hover {
+  background-color: #0056b3;
+}
+
+.participant-selection .selected-participants {
+  /* Existing styles are mostly fine, just ensuring it looks good */
+  border: 1px solid #eee;
+  padding: 10px;
+  border-radius: 4px;
+  min-height: 50px;
+  background-color: #f9f9f9;
+}
+
+.participant-selection .participant-tag {
+  display: inline-flex;
+  align-items: center;
+  background-color: #e0e0e0;
+  border-radius: 15px;
+  padding: 5px 10px;
+  margin: 5px;
+  font-size: 0.9em;
+}
+
+.participant-selection .participant-tag button {
+  background: none;
+  border: none;
+  color: #777;
+  margin-left: 8px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.participant-selection .participant-tag button:hover {
+  color: #333;
+}
+
+/* ... (existing styles) ... */
+
+.participant-selection .selected-participants-table-container {
+  border: 1px solid #eee;
+  border-radius: 4px;
+  min-height: 50px;
+  background-color: #f9f9f9;
+  overflow-x: auto; /* Enable horizontal scroll if table is wide */
+  margin-top: 10px;
+}
+
+.selected-participants-table-container table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.selected-participants-table-container th,
+.selected-participants-table-container td {
+  padding: 8px;
+  border-bottom: 1px solid #eee;
+  text-align: left;
+  white-space: nowrap; /* Prevent wrapping in table cells */
+}
+
+.selected-participants-table-container th {
+  background-color: #e0e0e0;
+  font-weight: bold;
+}
+
+.remove-participant-button {
+  padding: 5px 10px;
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.85em;
+}
+
+.remove-participant-button:hover {
+  background-color: #c82333;
+}
+
+
