@@ -1,1 +1,107 @@
-<p>ld-events works!</p>
+<!-- src/app/modules/events/ld-events/ld-events.html -->
+
+<div class="events-dashboard-container">
+  <div class="dashboard-header">
+    <h2>Events Dashboard</h2>
+    <button class="add-event-button" (click)="navigateToAddEvent()">Add Event</button>
+  </div>
+
+  <!-- Filter Section -->
+  <div class="filter-section">
+    <div class="filter-group">
+      <label for="searchTerm">Search by ID or Name:</label>
+      <input
+        id="searchTerm"
+        type="text"
+        [(ngModel)]="searchTerm"
+        (input)="onSearchTermChange($event.target.value)"
+        placeholder="Event ID or Name"
+      >
+    </div>
+
+    <div class="filter-group">
+      <label for="description">Description:</label>
+      <input
+        id="description"
+        type="text"
+        [(ngModel)]="filterDescription"
+        (change)="applyFilters()"
+        placeholder="Description keyword"
+      >
+    </div>
+
+    <div class="filter-group">
+      <label for="eventType">Event Type:</label>
+      <input
+        id="eventType"
+        type="text"
+        [(ngModel)]="filterEventType"
+        (change)="applyFilters()"
+        placeholder="e.g., Technical"
+      >
+    </div>
+
+    <div class="filter-group">
+      <label for="status">Status:</label>
+      <select id="status" [(ngModel)]="filterStatus" (change)="applyFilters()">
+        <option value="">All</option>
+        <option value="READY">READY</option>
+        <option value="IN_PROGRESS">IN_PROGRESS</option>
+        <option value="COMPLETED">COMPLETED</option>
+        <option value="CANCELLED">CANCELLED</option>
+      </select>
+    </div>
+
+    <div class="filter-actions">
+      <button class="clear-filters-button" (click)="clearFilters()">Clear Filters</button>
+    </div>
+  </div>
+  <!-- End Filter Section -->
+
+  <div *ngIf="isLoading" class="loading-message">
+    Loading events...
+  </div>
+
+  <div *ngIf="errorMessage" class="error-message">
+    {{ errorMessage }}
+  </div>
+
+  <div *ngIf="!isLoading && !errorMessage && events.length === 0" class="no-events-message">
+    No events found.
+  </div>
+
+  <table *ngIf="!isLoading && !errorMessage && events.length > 0" class="events-table">
+    <thead>
+      <tr>
+        <th>Event ID</th>
+        <th>Event Name</th>
+        <th>Description</th>
+        <th>Participants</th>
+        <th>Duration</th>
+        <th>Event Type</th>
+        <th>Funding Source</th>
+        <th>Status</th>
+        <th>Actions</th> <!-- NEW: Actions column header -->
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let event of events">
+        <td>{{ event.eventId }}</td>
+        <td>{{ event.eventName }}</td>
+        <td>{{ event.description }}</td>
+        <td>{{ event.participantsCount }}</td>
+        <td>{{ event.duration }}</td>
+        <td>{{ event.eventType }}</td>
+        <td>{{ event.fundingSource }}</td>
+        <td>{{ event.status }}</td>
+        <td>
+          <div class="action-buttons-group"> <!-- NEW: Group for action buttons -->
+            <button class="action-button view" >View</button>
+            <button class="action-button edit" >Edit</button>
+            <button class="action-button delete" >Delete</button>
+          </div>
+        </td> <!-- NEW: Actions column with buttons -->
+      </tr>
+    </tbody>
+  </table>
+</div>

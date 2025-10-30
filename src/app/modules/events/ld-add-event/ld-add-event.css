@@ -1,0 +1,395 @@
+/* src/app/modules/events/ld-add-event/ld-add-event.css */
+
+/* Overall Container Styling - Similar to events dashboard */
+.add-event-container {
+  padding: 30px;
+  font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  max-width: 1300px; /* Increased max-width to give tables more room */
+  margin: 30px auto;
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Headings */
+h2 {
+  color: #212529;
+  margin-bottom: 30px;
+  text-align: center;
+  font-size: 2.2em;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+h3 {
+  color: #343a40;
+  margin-top: 35px;
+  margin-bottom: 20px;
+  font-size: 1.6em;
+  border-bottom: 2px solid #e9ecef;
+  padding-bottom: 10px;
+  text-align: left;
+}
+
+/* Form Sections */
+.form-section {
+  margin-bottom: 30px;
+  padding: 25px;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  background-color: #f8f9fa;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+/* Form Groups (Label + Input) - MODIFIED */
+.form-group {
+  display: grid; /* Use CSS Grid for alignment */
+  grid-template-columns: 150px 1fr; /* Label takes 150px, input takes remaining space */
+  gap: 10px 15px; /* Row gap and column gap */
+  align-items: center; /* Vertically align label and input */
+  margin-bottom: 15px; /* Slightly reduced margin for compactness */
+}
+
+.form-group label {
+  /* display: block; -- REMOVED */
+  font-weight: 600;
+  margin-bottom: 0; /* Remove default block margin */
+  color: #495057;
+  font-size: 0.95em;
+  text-align: right; /* Align label text to the right */
+  padding-right: 5px; /* Small padding for visual separation from input */
+}
+
+.form-group input[type="text"],
+.form-group input[type="number"],
+.form-group textarea,
+.form-group select {
+  /* width: 100%; -- REMOVED, grid will handle width */
+  padding: 8px 12px; /* Reduced padding for a more compact look */
+  border: 1px solid #ced4da;
+  border-radius: 6px;
+  font-size: 0.95em; /* Slightly reduced font size */
+  color: #495057;
+  background-color: #fff;
+  box-sizing: border-box;
+  transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.form-group textarea {
+  min-height: 80px; /* Slightly reduced min-height for compactness */
+  resize: vertical;
+}
+
+/* Focus states for form elements */
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+  border-color: #007bff;
+  outline: 0;
+  box-shadow: 0 0 0 0.25rem rgba(0, 123, 255, 0.25);
+}
+
+/* Error messages for validation - MODIFIED */
+.error-message-inline {
+  color: #dc3545;
+  font-size: 0.85em;
+  margin-top: -5px; /* Pull up slightly to reduce gap with input */
+  margin-bottom: 5px; /* Add some space below the error message */
+  grid-column: 2 / 3; /* Make it span the second column (under the input) */
+  text-align: left; /* Ensure text alignment is correct */
+}
+
+
+/* --- Request Search and Selection Styles --- */
+.request-search-area {
+  margin-top: 30px;
+  margin-bottom: 25px;
+  padding: 20px;
+  border: 1px solid #a2d2ff;
+  border-radius: 8px;
+  background-color: #e9f5ff;
+}
+
+.search-input-group {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.search-input-group label {
+  flex-shrink: 0;
+  margin-bottom: 0;
+  font-weight: 600;
+}
+
+.search-input-group input[type="text"] {
+  flex-grow: 1;
+  min-width: 180px;
+  padding: 10px 12px;
+  border-radius: 5px;
+}
+
+.search-toggle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+  margin-left: auto;
+}
+
+.search-toggle input[type="radio"] {
+  margin-right: 5px;
+  width: auto;
+}
+
+.search-toggle label {
+  font-weight: normal;
+  margin-bottom: 0;
+  color: #495057;
+}
+
+.search-results-table,
+.selected-requests-table {
+  margin-top: 25px;
+  overflow-x: auto;
+}
+
+.search-results-table h4,
+.selected-requests-table h4 {
+  color: #333;
+  margin-bottom: 15px;
+  font-size: 1.2em;
+  font-weight: 600;
+}
+
+/* Table styling similar to dashboard */
+.search-results-table table,
+.selected-requests-table table {
+  width: 100%;
+  min-width: 1000px;
+  border-collapse: separate;
+  border-spacing: 0;
+  background-color: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.search-results-table th,
+.selected-requests-table th,
+.search-results-table td,
+.selected-requests-table td {
+  border: 1px solid #e9ecef;
+  padding: 12px 15px;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.search-results-table th,
+.selected-requests-table th {
+  background-color: #f2f2f2;
+  font-weight: 600;
+  color: #555;
+}
+
+/* Rounded corners for table headers */
+.search-results-table th:first-child, .selected-requests-table th:first-child { border-top-left-radius: 8px; }
+.search-results-table th:last-child, .selected-requests-table th:last-child { border-top-right-radius: 8px; }
+
+/* Alternating row colors */
+.search-results-table tbody tr:nth-child(even),
+.selected-requests-table tbody tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+/* Hover effect for table rows */
+.search-results-table tbody tr:hover,
+.selected-requests-table tbody tr:hover {
+  background-color: #e0f2ff;
+  transition: background-color 0.2s ease-in-out;
+}
+
+/* Action buttons within tables */
+.action-button {
+  padding: 8px 15px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  font-size: 0.9em;
+  transition: background-color 0.2s ease-in-out, transform 0.1s ease-in-out;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.action-button.add {
+  background-color: #28a745;
+  color: white;
+}
+
+.action-button.add:hover {
+  background-color: #218838;
+  transform: translateY(-1px);
+}
+
+.action-button.add:disabled {
+  background-color: #dc3545; /* Red */
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+
+.action-button.remove {
+  background-color: #dc3545;
+  color: white;
+}
+
+.action-button.remove:hover {
+  background-color: #c82333;
+  transform: translateY(-1px);
+}
+
+/* Messages for empty states */
+.no-requests-selected,
+.no-results-message {
+  padding: 15px;
+  background-color: #fffde7;
+  color: #6a5a00;
+  border: 1px solid #ffeb3b;
+  border-radius: 5px;
+  text-align: center;
+  margin-top: 15px;
+  font-size: 0.95em;
+}
+
+/* --- Form Actions and Messages --- */
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 15px;
+  margin-top: 40px;
+  padding-top: 25px;
+  border-top: 1px solid #e9ecef;
+}
+
+.submit-button,
+.cancel-button {
+  padding: 12px 30px;
+  border-radius: 6px;
+  font-size: 1.1em;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out, transform 0.2s ease-in-out;
+  border: none;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.submit-button {
+  background-color: #007bff;
+  color: white;
+}
+
+.submit-button:hover:not(:disabled) {
+  background-color: #0056b3;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.submit-button:disabled {
+  background-color: #a0c9ed;
+  cursor: not-allowed;
+  opacity: 0.8;
+  box-shadow: none;
+}
+
+.cancel-button {
+  background-color: #6c757d;
+  color: white;
+}
+
+.cancel-button:hover {
+  background-color: #5a6268;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Block error messages (e.g., submission error) */
+.error-message-block {
+  color: #721c24;
+  background-color: #f8d7da;
+  border: 1px solid #f5c6cb;
+  padding: 15px 20px;
+  border-radius: 5px;
+  margin-top: 20px;
+  text-align: center;
+  font-size: 1em;
+  font-weight: 500;
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 768px) {
+  .add-event-container {
+    padding: 20px;
+    margin: 20px auto;
+  }
+  h2 {
+    font-size: 1.8em;
+    margin-bottom: 20px;
+  }
+  h3 {
+    font-size: 1.4em;
+    margin-top: 25px;
+  }
+  .form-section {
+    padding: 15px;
+  }
+  /* For small screens, revert form groups to stacked layout for readability */
+  .form-group {
+    grid-template-columns: 1fr; /* Stack label and input */
+    gap: 5px 0; /* Adjust gap */
+    margin-bottom: 20px;
+  }
+  .form-group label {
+    text-align: left; /* Align labels left when stacked */
+    width: auto;
+    margin-right: 0;
+    margin-bottom: 5px; /* Add some space below label */
+  }
+  .error-message-inline {
+    grid-column: 1 / -1; /* Make error span full width */
+    margin-top: 0;
+  }
+
+  .search-input-group {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .search-input-group input[type="text"] {
+    min-width: unset;
+    width: 100%;
+  }
+  .search-toggle {
+    margin-left: 0;
+    width: 100%;
+    justify-content: center;
+  }
+  .form-actions {
+    flex-direction: column;
+    gap: 10px;
+  }
+  .submit-button, .cancel-button {
+    width: 100%;
+    padding: 10px 20px;
+  }
+
+  /* Tables on small screens */
+  .search-results-table,
+  .selected-requests-table {
+    overflow-x: auto;
+  }
+
+  .search-results-table table,
+  .selected-requests-table table {
+    min-width: 800px;
+  }
+}
