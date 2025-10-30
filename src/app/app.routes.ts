@@ -3,6 +3,8 @@ import { LcDashboard } from './modules/dashboard/lc-dashboard/lc-dashboard';
 import { LdDashboard } from './modules/dashboard/ld-dashboard/ld-dashboard';
 import { LdNewRequest } from './modules/requests/ld-new-request/ld-new-request';
 import { LcNewRequest } from './modules/requests/lc-new-request/lc-new-request';
+import { LdViewEventComponent } from './modules/events/ld-view-event/ld-view-event';
+import { LdEditEventComponent } from './modules/events/ld-edit-event/ld-edit-event';
 import { LdEvents } from './modules/events/ld-events/ld-events';
 import { LdAddEvent } from './modules/events/ld-add-event/ld-add-event';
 
@@ -13,5 +15,9 @@ export const routes: Routes = [
     { path: 'dashboard/ld/:id/create', component: LdNewRequest },
     {path:'ld-events',component: LdEvents},
     {path:'ld-add-event', component: LdAddEvent},
-    { path: '', redirectTo: 'dashboard/lc/16', pathMatch: 'full' },
+    { path: 'events/view/:id', component: LdViewEventComponent },
+    { path: 'events/edit/:id', component: LdEditEventComponent },
+    {path:'ld-events',component: LdEvents},
+    {path:'ld-add-event', component: LdAddEvent},
+    { path: '', redirectTo: 'dashboard/lc/16', pathMatch: 'full' }
 ];
