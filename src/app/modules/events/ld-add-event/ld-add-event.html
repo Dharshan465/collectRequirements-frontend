@@ -1,1 +1,231 @@
-<p>ld-add-event works!</p>
+<!-- src/app/modules/events/ld-add-event/ld-add-event.html -->
+
+<div class="add-event-container">
+  <h2>Create New Event</h2>
+
+  <form (ngSubmit)="onSubmit()" #eventForm="ngForm">
+    <div class="form-section">
+      <h3>Event Details</h3>
+
+      <div class="form-group">
+        <label for="eventName">Event Name:</label>
+        <input
+          id="eventName"
+          name="eventName"
+          type="text"
+          [(ngModel)]="newEvent.eventName"
+          required
+          #eventName="ngModel"
+        >
+        <div *ngIf="eventName.invalid && (eventName.dirty || eventName.touched)" class="error-message-inline">
+          <div *ngIf="eventName.errors?.['required']">Event Name is required.</div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="description">Description:</label>
+        <textarea
+          id="description"
+          name="description"
+          [(ngModel)]="newEvent.description"
+          required
+          #description="ngModel"
+        ></textarea>
+        <div *ngIf="description.invalid && (description.dirty || description.touched)" class="error-message-inline">
+          <div *ngIf="description.errors?.['required']">Description is required.</div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="duration">Duration (in hours/days/etc.):</label>
+        <input
+          id="duration"
+          name="duration"
+          type="number"
+          [(ngModel)]="newEvent.duration"
+          required
+          min="0"
+          #duration="ngModel"
+        >
+        <div *ngIf="duration.invalid && (duration.dirty || duration.touched)" class="error-message-inline">
+          <div *ngIf="duration.errors?.['required']">Duration is required.</div>
+          <div *ngIf="duration.errors?.['min']">Duration cannot be negative.</div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="eventType">Event Type:</label>
+        <input
+          id="eventType"
+          name="eventType"
+          type="text"
+          [(ngModel)]="newEvent.eventType"
+          required
+          #eventType="ngModel"
+        >
+        <div *ngIf="eventType.invalid && (eventType.dirty || eventType.touched)" class="error-message-inline">
+          <div *ngIf="eventType.errors?.['required']">Event Type is required.</div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="fundingSource">Funding Source:</label>
+        <input
+          id="fundingSource"
+          name="fundingSource"
+          type="text"
+          [(ngModel)]="newEvent.fundingSource"
+          required
+          #fundingSource="ngModel"
+        >
+        <div *ngIf="fundingSource.invalid && (fundingSource.dirty || fundingSource.touched)" class="error-message-inline">
+          <div *ngIf="fundingSource.errors?.['required']">Funding Source is required.</div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="status">Status:</label>
+        <select
+          id="status"
+          name="status"
+          [(ngModel)]="newEvent.status"
+          required
+          #status="ngModel"
+        >
+          <option value="READY">READY</option>
+          <option value="IN_PROGRESS">IN_PROGRESS</option>
+          <option value="COMPLETED">COMPLETED</option>
+          <option value="CANCELLED">CANCELLED</option>
+        </select>
+        <div *ngIf="status.invalid && (status.dirty || status.touched)" class="error-message-inline">
+          <div *ngIf="status.errors?.['required']">Status is required.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <h3>Select Requests for Event</h3>
+      <h6>Note: Only event not assigned and approved requests can be added to the event.</h6>
+
+      <div class="request-search-area">
+        <div class="search-input-group">
+          <label for="requestSearch">Search Request:</label>
+          <input
+            id="requestSearch"
+            type="text"
+            [(ngModel)]="requestSearchTerm"
+            (input)="onSearchTermChange($event.target.value)"
+            name="requestSearchTerm"
+            placeholder="Search by ID or Name"
+          >
+          <div class="search-toggle">
+            <input type="radio" id="searchById" name="searchType" [(ngModel)]="searchById" [value]="true">
+            <label for="searchById">ID</label>
+            <input type="radio" id="searchByName" name="searchType" [(ngModel)]="searchById" [value]="false">
+            <label for="searchByName">Name</label>
+          </div>
+        </div>
+        <div *ngIf="searchError" class="error-message-block">{{ searchError }}</div>
+
+        <div *ngIf="availableRequests.length > 0" class="search-results-table">
+          <h4>Available Requests:</h4>
+          <table>
+            <thead>
+              <tr>
+                <th>Request ID</th>
+                <th>Requestor ID</th>
+                <th>Department ID</th>
+                <th>Event ID</th>
+                <th>Request Date</th>
+                <th>Status</th>
+                <th>Group Request</th>
+                <th>Justification</th>
+                <th>TAN Number</th>
+                <th>Curriculum</th>
+                <th>Participants</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let req of availableRequests">
+                <td>{{ req.requestId }}</td>
+                <td>{{ req.user.userId || 'N/A' }}</td>
+                <td>{{ req.department.departmentId || 'N/A' }}</td> <!-- Changed from ?. to . -->
+                <td>{{ req.event?.eventId || 'N/A' }}</td> <!-- Keep ?. here as event is optional -->
+                <td>{{ req.requestDate }}</td>
+                <td>{{ req.requestStatus }}</td>
+                <td>{{ req.groupRequest ? 'Yes' : 'No' }}</td>
+                <td>{{ req.justification }}</td>
+                <td>{{ req.tan_Number }}</td>
+                <td>{{ req.curriculamLink }}</td>
+                <td>{{ req.noOfParticipants }}</td>
+ <td>
+                  <button
+                    type="button"
+                    class="action-button add"
+                    (click)="addRequestToSelection(req)"
+                    [disabled]="req.event?.eventId || req.requestStatus !== 'APPROVED'" 
+                  >
+                    Add
+                  </button>
+                </td>              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div *ngIf="requestSearchTerm && availableRequests.length === 0 && !searchError" class="no-results-message">
+            No requests found matching "{{ requestSearchTerm }}".
+        </div>
+      </div>
+
+      <div class="selected-requests-table">
+        <h4>Selected Requests for this Event:</h4>
+        <div *ngIf="selectedRequests.length === 0" class="no-requests-selected">
+          No requests selected yet.
+        </div>
+        <table *ngIf="selectedRequests.length > 0">
+          <thead>
+            <tr>
+                <th>Request ID</th>
+                <th>Requestor ID</th>
+                <th>Department ID</th>
+                <th>Event ID</th>
+                <th>Request Date</th>
+                <th>Status</th>
+                <th>Group Request</th>
+                <th>Justification</th>
+                <th>TAN Number</th>
+                <th>Curriculum</th>
+                <th>Participants</th>
+                <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let req of selectedRequests">
+              <td>{{ req.requestId }}</td>
+              <td>{{ req.user.userId || 'N/A' }}</td>
+              <td>{{ req.department.departmentId || 'N/A' }}</td> <!-- Changed from ?. to . -->
+              <td>{{ req.event?.eventId || 'N/A' }}</td> <!-- Keep ?. here as event is optional -->
+              <td>{{ req.requestDate }}</td>
+              <td>{{ req.requestStatus }}</td>
+              <td>{{ req.groupRequest ? 'Yes' : 'No' }}</td>
+              <td>{{ req.justification }}</td>
+              <td>{{ req.tan_Number }}</td>
+              <td>{{ req.curriculamLink }}</td>
+              <td>{{ req.noOfParticipants }}</td>
+              <td><button type="button" class="action-button remove" (click)="removeRequestFromSelection(req.requestId)">Remove</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" [disabled]="eventForm.invalid || isLoading" class="submit-button">
+        <span *ngIf="!isLoading">Create Event</span>
+        <span *ngIf="isLoading">Creating Event...</span>
+      </button>
+      <button type="button" class="cancel-button" (click)="router.navigate(['/ld-events'])">Cancel</button>
+    </div>
+    <div *ngIf="submitError" class="error-message-block">{{ submitError }}</div>
+  </form>
+</div>
