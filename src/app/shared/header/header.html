@@ -1,0 +1,21 @@
+<header class="app-header">
+  <div class="header-left">
+    <img src="FordOval.png" alt="Ford Logo" class="ford-logo" />
+    <span class="app-text">Learning & Development : Requirement Management</span>
+  </div>
+  <div class="header-right">
+    <div class="user-dropdown-container">
+      <button class="user-info" (click)="toggleDropdown()">
+        <span class="user-icon">👤</span> <!-- Placeholder for a user icon -->
+        <span>Hi, {{ userName }}</span>
+        <span class="dropdown-arrow" [class.rotated]="showDropdown"></span> <!-- Arrow rotates when dropdown is open -->
+      </button>
+      @if (showDropdown) {
+        <div class="dropdown-menu">
+          <button class="dropdown-item" (click)="viewProfile()">My Profile</button>
+          <button class="dropdown-item" (click)="logout()">Logout</button>
+        </div>
+      }
+    </div>
+  </div>
+</header>

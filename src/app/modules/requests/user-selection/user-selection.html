@@ -1,0 +1,77 @@
+<div class="modal-backdrop">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>Select Participants</h2>
+      <button class="close-button" (click)="cancelSelection()">X</button>
+    </div>
+
+    <div class="modal-body">
+      <div class="filters-container">
+        <div class="filter-row">
+          <div class="filter-group">
+            <label for="usernameFilter">Username:</label>
+            <input type="text" id="usernameFilter" [(ngModel)]="filters.username" (ngModelChange)="applyFilter()" placeholder="Search by username">
+          </div>
+          <div class="filter-group">
+            <label for="departmentFilter">Department:</label>
+            <input type="text" id="departmentFilter" [(ngModel)]="filters.departmentName" (ngModelChange)="applyFilter()" placeholder="Search by department name">
+          </div>
+        </div>
+        <div class="filter-row">
+          <div class="filter-group">
+            <label for="managerFilter">Manager:</label>
+            <input type="text" id="managerFilter" [(ngModel)]="filters.managerName" (ngModelChange)="applyFilter()" placeholder="Search by manager name">
+          </div>
+          <div class="filter-group">
+            <label for="regionFilter">Region:</label>
+            <input type="text" id="regionFilter" [(ngModel)]="filters.regionName" (ngModelChange)="applyFilter()" placeholder="Search by region name">
+          </div>
+        </div>
+        <div class="filter-actions">
+          <button type="button" class="clear-filters-button" (click)="clearAllFilters()">Clear All Filters</button>
+        </div>
+      </div>
+
+      <div class="user-table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>User ID</th>
+              <th>User Name</th>
+              <th>Email</th>
+              <th>Role</th>
+              <th>Department</th>
+              <th>Manager</th>
+              <th>Region</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let user of filteredUsers">
+              <td>{{ user.userId }}</td>
+              <td>{{ user.userName }}</td>
+              <td>{{ user.email }}</td>
+              <td>{{ user.role }}</td>
+              <td>{{ user.departmentName }}</td>
+              <td>{{ user.managerName || 'N/A' }}</td>
+              <td>{{ user.regionName || 'N/A' }}</td>
+              <td>
+                <button class="action-button" [class.selected]="isUserSelected(user)" (click)="toggleUserSelection(user)">
+                  {{ isUserSelected(user) ? 'Remove' : 'Add' }}
+                </button>
+              </td>
+            </tr>
+            <tr *ngIf="filteredUsers.length === 0">
+              <td colspan="8" class="no-users-found">No users found.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button class="cancel-button" (click)="cancelSelection()">Cancel</button>
+      <button class="confirm-button" (click)="confirmSelection()">Add Selected</button>
+    </div>
+  </div>
+</div>

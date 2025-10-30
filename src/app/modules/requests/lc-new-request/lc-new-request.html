@@ -1,1 +1,84 @@
-<p>lc-new-request works!</p>
+<div class="new-requirement-container">
+  <header class="form-header">
+    <h1>New Requirement</h1>
+    <button class="back-button" (click)="navigateBack()">Back to Dashboard</button>
+  </header>
+
+<form (ngSubmit)="onSubmit()" #requestForm="ngForm">
+    <div class="form-group">
+      <label for="requestorId">Requestor ID:</label>
+      <input type="text" id="requestorId" [ngModel]="this.lcUserId" name="requestorId" readonly>
+    </div>
+
+    <div class="form-group">
+      <label for="justification">Justification:</label>
+      <textarea id="justification" [(ngModel)]="newRequest.justification" name="justification" required></textarea>
+    </div>
+
+    <div class="form-group checkbox-group">
+        <label for="groupRequest">Group Request:</label>
+        <input type="checkbox" id="groupRequest" [(ngModel)]="newRequest.groupRequest" name="groupRequest" disabled>
+        <span class="auto-update-note">(Automatically set to "Yes" when more than 10 participants are selected)</span>
+    </div>
+
+    <div class="form-group">
+      <label for="tanNumber">TAN Number:</label>
+      <input type="text" id="tanNumber" [(ngModel)]="newRequest.tanNumber" name="tanNumber" required>
+    </div>
+
+    <div class="form-group">
+      <label for="curriculumLink">Curriculum Link:</label>
+      <input type="url" id="curriculumLink" [(ngModel)]="newRequest.curriculumLink" name="curriculumLink">
+    </div>
+
+    <div class="form-group participant-selection">
+      <label>Participants:</label>
+      <button type="button" class="select-participants-button" (click)="openUserSelectionPopup()">Select Participants</button>
+
+      <div class="selected-participants-table-container">
+        <table *ngIf="selectedParticipantsDisplay.length > 0; else noParticipantsSelected">
+          <thead>
+            <tr>
+              <th>User ID</th>
+              <th>User Name</th>
+              <th>Email</th>
+              <th>Role</th>
+              <th>Dept ID</th>
+              <th>Manager ID</th>
+              <th>Region ID</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let user of selectedParticipantsDisplay">
+              <td>{{ user.userId }}</td>
+              <td>{{ user.userName }}</td>
+              <td>{{ user.email }}</td>
+              <td>{{ user.role }}</td>
+              <td>{{ user.departmentId }}</td>
+              <td>{{ user.managerId ?? 'N/A' }}</td>
+              <td>{{ user.regionId ?? 'N/A' }}</td>
+              <td>
+                <button type="button" class="remove-participant-button" (click)="removeParticipant(user.userId)">Remove</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <ng-template #noParticipantsSelected>
+          <span class="no-participants">No participants selected.</span>
+        </ng-template>
+      </div>
+    </div>
+
+    <button type="submit" class="submit-button" [disabled]="!requestForm.form.valid">Submit Request</button>
+  </form>
+
+    <!-- User Selection Modal -->
+  <app-user-selection
+    *ngIf="showUserSelectionPopup"
+    [initialSelectedUsers]="selectedParticipantsDisplay"
+    (selectionConfirmed)="onModalSelectionConfirmed($event)"
+    (close)="onModalClose()">
+  </app-user-selection>
+
+  </div>
