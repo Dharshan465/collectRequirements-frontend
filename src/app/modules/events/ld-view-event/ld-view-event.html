@@ -28,7 +28,7 @@
 
                 <div class="grid-row">
                     <div class="label-pill">Participants</div>
-                    <div class="value-box">{{ event.participantsCount ?? '-' }}</div>
+                    <div class="value-box">{{ event.participantsCount || '-' }}</div>
                 </div>
 
                 <div class="grid-row">
@@ -78,8 +78,8 @@
                             <td>{{ r.requestStatus }}</td>
                             <td>{{ r.groupRequest ? 'Yes' : 'No' }}</td>
                             <td class="nowrap">{{ r.justification }}</td>
-                            <td class="center">{{ r.noOfAssociates ?? '-' }}</td>
-                            <td>{{ r.tanNumber }}</td>
+                            <td class="center">{{ r.noOfAssociates || '-' }}</td>
+                            <td>{{ r.tanNumber || '-' }}</td>
                             <td>{{ r.curriculumLink || '-' }}</td>
                         </tr>
                     </tbody>
@@ -88,6 +88,7 @@
         </section>
 
         <div class="button-container">
+            <button class="back-to-events-button" (click)="navigateBackToEvents()">Back to Events</button>
             <button class="edit-event-button" (click)="navigateToEditEvent()">Edit Event</button>
         </div>
     </main>

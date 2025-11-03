@@ -11,11 +11,39 @@
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
+/* Header Section with title and back button */
+.header-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #e9ecef;
+}
+
+/* Back to Events Button */
+.back-to-events-button {
+  background-color: #040c5c;
+  color: #ffffff;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 6px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.back-to-events-button:hover {
+  background-color: #030a4a;
+  transform: translateY(-1px);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
+}
+
 /* Headings */
 h2 {
   color: #212529;
-  margin-bottom: 30px;
-  text-align: center;
+  margin: 0;
   font-size: 2.2em;
   font-weight: 600;
   letter-spacing: 0.5px;

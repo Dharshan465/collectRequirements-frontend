@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { RequestCounts } from '../../../models/request-counts';
 import { Request } from '../../../services/requests/request';
 import { CommonModule } from '@angular/common';
@@ -32,7 +33,7 @@ export class LdDashboard implements OnInit {
   availableRequestorNames: string[] = [];
 
 
-  constructor(private readonly requestService: Request) { }
+  constructor(private readonly requestService: Request, private readonly router: Router) { }
 
   ngOnInit() {
     this.loadDashboard();
@@ -114,22 +115,26 @@ export class LdDashboard implements OnInit {
   }
 
   navigateToNewRequirement(): void {
-    // Logic to navigate to the new requirement page
+    this.router.navigate([`/dashboard/ld/${this.ldUserId}/create`]);
+  }
+
+  navigateToEvents(): void {
+    this.router.navigate(['/ld-events']);
   }
 
   onEdit(requestId: number): void {
     console.log(`Edit clicked for Request ID: ${requestId}`);
-    // Implement navigation to edit page
+    this.router.navigate(['/requests/edit', requestId]);
   }
 
   onView(requestId: number): void {
     console.log(`View clicked for Request ID: ${requestId}`);
-    // Implement navigation to view page
+    this.router.navigate(['/requests/view', requestId]);
   }
 
   onDelete(requestId: number): void {
     console.log(`Delete clicked for Request ID: ${requestId}`);
-    // Implement delete functionality
+    this.router.navigate(['/requests/delete', requestId]);
   }
 
 }

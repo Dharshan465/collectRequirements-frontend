@@ -13,7 +13,7 @@ import { CommonModule } from '@angular/common';
 export class UserSelection implements OnInit {
  @Input() initialSelectedUsers: UserParticipantDetails[] = [];
   @Output() selectionConfirmed = new EventEmitter<UserParticipantDetails[]>();
-  @Output() close = new EventEmitter<void>();
+  @Output() closeModal = new EventEmitter<void>();
 
   allUsers: UserParticipantDetails[] = [];
   filteredUsers: UserParticipantDetails[] = [];
@@ -45,9 +45,7 @@ export class UserSelection implements OnInit {
     const hasActiveFilters = this.filters.username || this.filters.departmentName || 
                            this.filters.managerName || this.filters.regionName;
 
-    if (!hasActiveFilters) {
-      this.filteredUsers = this.allUsers;
-    } else {
+    if (hasActiveFilters) {
       this.filteredUsers = this.allUsers.filter(user => {
         const matchesUsername = !this.filters.username || 
           user.userName.toLowerCase().includes(this.filters.username.toLowerCase());
@@ -64,6 +62,8 @@ export class UserSelection implements OnInit {
         // Return true only if ALL active filters match
         return matchesUsername && matchesDepartment && matchesManager && matchesRegion;
       });
+    } else {
+      this.filteredUsers = this.allUsers;
     }
   }
 
@@ -91,10 +91,10 @@ export class UserSelection implements OnInit {
 
   confirmSelection(): void {
     this.selectionConfirmed.emit(this.selectedUsers);
-    this.close.emit();
+    this.closeModal.emit();
   }
 
   cancelSelection(): void {
-    this.close.emit();
+    this.closeModal.emit();
   }
 }

@@ -4,6 +4,7 @@ import { RequestCounts } from '../../models/request-counts';
 import { Observable } from 'rxjs';
 import { RequestDetails } from '../../models/request-details';
 import { CreateRequest } from '../../models/create-request';
+import { EditRequest } from '../../models/edit-request';
 
 @Injectable({
   providedIn: 'root'
@@ -96,4 +97,22 @@ export class Request {
   createRequest(payload: CreateRequest): Observable<RequestDetails> {
     return this.http.post<RequestDetails>(`${this.API_BASE_URL_REQUEST}/create`, payload);
   }
+
+  // API to edit an existing request
+  editRequest(requestId: number, payload: EditRequest): Observable<RequestDetails> {
+    console.log('Request Service - editRequest called with:');
+    console.log('Request ID:', requestId);
+    console.log('Payload:', payload);
+    console.log('API URL:', `${this.API_BASE_URL_REQUEST}/edit/${requestId}`);
+    
+    return this.http.put<RequestDetails>(`${this.API_BASE_URL_REQUEST}/edit/${requestId}`, payload);
+  }
+
+  //API to get a request details
+  getRequest(requestId: number): Observable<RequestDetails> {
+    return this.http.get<RequestDetails>(`${this.API_BASE_URL_REQUEST}/id/${requestId}`);
+  }
+
+
+
 }

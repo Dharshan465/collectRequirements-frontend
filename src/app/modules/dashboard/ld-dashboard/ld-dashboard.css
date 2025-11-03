@@ -169,12 +169,15 @@
 .action-buttons {
   margin-bottom: 20px;
   text-align: right;
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
 }
 
 .new-requirement-button {
   padding: 10px 20px;
   background-color: #28a745; /* green variation for adding new requirements */
-  color: white; /* White text */
+  color: #ffffff; /* White text */
   border: none;
   border-radius: 5px;
   cursor: pointer;
@@ -187,6 +190,23 @@
 
 .new-requirement-button:hover {
   background-color: #218838; /* Darker green shade on hover */
+}
+
+.events-button {
+  padding: 10px 20px;
+  background-color: #007bff; /* Blue variation for events */
+  color: #ffffff; /* White text */
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1em;
+  font-family: Arial, sans-serif;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.events-button:hover {
+  background-color: #0056b3; /* Darker blue shade on hover */
 }
 
 .requests-table {

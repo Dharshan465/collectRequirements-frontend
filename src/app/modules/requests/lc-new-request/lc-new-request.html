@@ -32,8 +32,8 @@
     </div>
 
     <div class="form-group participant-selection">
-      <label>Participants:</label>
-      <button type="button" class="select-participants-button" (click)="openUserSelectionPopup()">Select Participants</button>
+      <label for="participantSelection">Participants:</label>
+      <button type="button" id="participantSelection" class="select-participants-button" (click)="openUserSelectionPopup()">Select Participants</button>
 
       <div class="selected-participants-table-container">
         <table *ngIf="selectedParticipantsDisplay.length > 0; else noParticipantsSelected">
@@ -78,7 +78,7 @@
     *ngIf="showUserSelectionPopup"
     [initialSelectedUsers]="selectedParticipantsDisplay"
     (selectionConfirmed)="onModalSelectionConfirmed($event)"
-    (close)="onModalClose()">
+    (closeModal)="onModalClose()">
   </app-user-selection>
 
   </div>

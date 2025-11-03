@@ -1,1 +1,189 @@
-<p>ld-view-request works!</p>
+<div class="view-request-container">
+  <!-- Header Section -->
+  <header class="view-header">
+    <h1>Request Details</h1>
+    <button class="back-button" (click)="navigateBack()">
+      ← Back to Dashboard
+    </button>
+  </header>
+
+  <!-- Loading State -->
+  <div *ngIf="loading" class="loading-state">
+    <div class="loading-spinner"></div>
+    <p>Loading request details...</p>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="error && !loading" class="error-state">
+    <div class="error-icon">⚠️</div>
+    <h3>Error Loading Request</h3>
+    <p>{{ error }}</p>
+    <button class="retry-button" (click)="loadRequestDetails()">
+      Try Again
+    </button>
+  </div>
+
+  <!-- Request Details Content -->
+  <div *ngIf="requestDetails && !loading && !error" class="request-content">
+    
+    <!-- Request Information Card -->
+    <section class="info-card">
+      <h2>Request Information</h2>
+      <div class="info-grid">
+        <div class="info-item">
+          <label>Request ID:</label>
+          <span class="value">{{ requestDetails.requestId }}</span>
+        </div>
+        
+        <div class="info-item">
+          <label>Request Date:</label>
+          <span class="value">{{ requestDetails.requestDate | date:'medium' }}</span>
+        </div>
+        
+        <div class="info-item">
+          <label>Status:</label>
+          <span class="status-badge" [class]="getStatusBadgeClass(requestDetails.requestStatus)">
+            {{ requestDetails.requestStatus }}
+          </span>
+        </div>
+        
+        <div class="info-item">
+          <label>Request Type:</label>
+          <span class="value">{{ requestDetails.groupRequest ? 'Group Request' : 'Individual Request' }}</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Requestor Information Card -->
+    <section class="info-card">
+      <h2>Requestor Information</h2>
+      <div class="info-grid">
+        <div class="info-item">
+          <label>Requestor ID:</label>
+          <span class="value">{{ requestDetails.requestorId }}</span>
+        </div>
+        
+        <div class="info-item">
+          <label>Requestor Name:</label>
+          <span class="value" [class.unknown-info]="!requestDetails.requestorName || requestDetails.requestorName === 'Unknown Requestor'">
+            {{ requestDetails.requestorName }}
+          </span>
+        </div>
+        
+        <div class="info-item">
+          <label>Department:</label>
+          <span class="value" [class.unknown-info]="!requestDetails.departmentName || requestDetails.departmentName === 'Unknown Department'">
+            {{ requestDetails.departmentName }}
+          </span>
+        </div>
+        
+        <div class="info-item">
+          <label>Department ID:</label>
+          <span class="value">{{ requestDetails.departmentId }}</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Event Information Card -->
+    <section class="info-card">
+      <h2>Event Information</h2>
+      <div class="info-grid">
+        <div class="info-item">
+          <label>Event ID:</label>
+          <span class="value">{{ requestDetails.eventId || 'Not Assigned' }}</span>
+        </div>
+        
+        <div class="info-item">
+          <label>Event Name:</label>
+          <span class="value" [class.no-event]="!requestDetails.eventName || requestDetails.eventName === 'No Event Assigned'">
+            {{ requestDetails.eventName }}
+          </span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Request Details Card -->
+    <section class="info-card">
+      <h2>Request Details</h2>
+      <div class="info-grid">
+        <div class="info-item full-width">
+          <label>Justification:</label>
+          <div class="text-content">{{ requestDetails.justification || 'No justification provided' }}</div>
+        </div>
+        
+        <div class="info-item">
+          <label>TAN Number:</label>
+          <span class="value">{{ requestDetails.tanNumber || 'Not provided' }}</span>
+        </div>
+        
+        <div class="info-item">
+          <label>Curriculum Link:</label>
+          <span class="value">
+            <a *ngIf="requestDetails.curriculumLink; else noCurriculum" 
+               [href]="requestDetails.curriculumLink" 
+               target="_blank" 
+               class="link">
+              {{ requestDetails.curriculumLink }}
+            </a>
+            <ng-template #noCurriculum>Not provided</ng-template>
+          </span>
+        </div>
+        
+        <div class="info-item">
+          <label>Number of Participants:</label>
+          <span class="value participant-count">{{ requestDetails.noOfParticipants }}</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Participants Information Card -->
+    <section class="info-card participants-card">
+      <h2>Participants Details</h2>
+      
+      <div *ngIf="participantsDetails.length === 0" class="no-participants">
+        <div class="empty-state">
+          <div class="empty-icon">👥</div>
+          <h3>No Participants</h3>
+          <p>This request has no participants assigned.</p>
+        </div>
+      </div>
+
+      <div *ngIf="participantsDetails.length > 0" class="participants-section">
+        <div class="participants-summary">
+          <span class="summary-text">
+            Total Participants: <strong>{{ participantsDetails.length }}</strong>
+          </span>
+        </div>
+        
+        <div class="participants-table-container">
+          <table class="participants-table">
+            <thead>
+              <tr>
+                <th>User ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Department</th>
+                <th>Manager</th>
+                <th>Region</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let participant of participantsDetails; let i = index" 
+                  [class.odd-row]="i % 2 === 1">
+                <td>{{ participant.userId }}</td>
+                <td class="name-cell">{{ participant.userName }}</td>
+                <td class="email-cell">{{ participant.email }}</td>
+                <td>{{ participant.role }}</td>
+                <td>{{ participant.departmentName }}</td>
+                <td>{{ participant.managerName || 'N/A' }}</td>
+                <td>{{ participant.regionName || 'N/A' }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</div>

@@ -3,7 +3,10 @@
 <div class="events-dashboard-container">
   <div class="dashboard-header">
     <h2>Events Dashboard</h2>
-    <button class="add-event-button" (click)="navigateToAddEvent()">Add Event</button>
+    <div class="header-buttons">
+      <button class="back-button" (click)="navigateBackToDashboard()">Back to Dashboard</button>
+      <button class="add-event-button" (click)="navigateToAddEvent()">Add Event</button>
+    </div>
   </div>
 
   <!-- Filter Section -->
@@ -95,12 +98,12 @@
         <td>{{ event.fundingSource }}</td>
         <td>{{ event.status }}</td>
         <td>
-          <div class="action-buttons-group"> <!-- NEW: Group for action buttons -->
-            <button class="action-button view" >View</button>
-            <button class="action-button edit" >Edit</button>
-            <button class="action-button delete" >Delete</button>
+          <div class="action-buttons-group"> <!-- Group for action buttons -->
+            <button class="action-button view" (click)="navigateToViewEvent(event.eventId)">View</button>
+            <button class="action-button edit" (click)="navigateToEditEvent(event.eventId)">Edit</button>
+            <button class="action-button delete" (click)="deleteEvent(event.eventId)">Delete</button>
           </div>
-        </td> <!-- NEW: Actions column with buttons -->
+        </td> <!-- Actions column with buttons -->
       </tr>
     </tbody>
   </table>

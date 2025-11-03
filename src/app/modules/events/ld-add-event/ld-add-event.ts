@@ -2,7 +2,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { LdAddEventService } from '../../../service/addevent/ld-add-event';
 import { addEvent } from '../../../models/add-event';
@@ -16,7 +15,6 @@ import { debounceTime, distinctUntilChanged, Subject, Subscription } from 'rxjs'
   imports: [
     CommonModule,
     FormsModule,
-    HttpClientModule,
   ],
   templateUrl: './ld-add-event.html',
   styleUrl: './ld-add-event.css',
@@ -41,11 +39,11 @@ export class LdAddEvent implements OnInit, OnDestroy {
   submitError: string | null = null;
   searchError: string | null = null;
 
-  private requestSearchTerms = new Subject<string>();
-  private subscriptions: Subscription[] = [];
+  private readonly requestSearchTerms = new Subject<string>();
+  private readonly subscriptions: Subscription[] = [];
 
   constructor(
-    private ldAddEventService: LdAddEventService,
+    private readonly ldAddEventService: LdAddEventService,
     public router: Router
   ) { }
 
@@ -55,10 +53,11 @@ export class LdAddEvent implements OnInit, OnDestroy {
         debounceTime(300),
         distinctUntilChanged()
       ).subscribe(term => {
-        if (term.trim() !== '') {
-          this.searchRequests();
-        } else {
+        if (term.trim() === '') {
           this.availableRequests = [];
+          this.searchError = null;
+        } else {
+          this.searchRequests();
         }
       })
     );
@@ -110,8 +109,11 @@ export class LdAddEvent implements OnInit, OnDestroy {
 
     this.searchError = null;
     if (this.searchById) {
-      const requestId = parseInt(term, 10);
-      if (!isNaN(requestId)) {
+      const requestId = Number.parseInt(term, 10);
+      if (Number.isNaN(requestId)) {
+        this.searchError = 'Please enter a valid request ID.';
+        this.availableRequests = [];
+      } else {
         this.ldAddEventService.getRequestById(requestId).subscribe({
           next: (request: addRequestToEvent) => {
             this.availableRequests = request ? [request] : [];
@@ -125,9 +127,6 @@ export class LdAddEvent implements OnInit, OnDestroy {
             this.availableRequests = [];
           }
         });
-      } else {
-        this.searchError = 'Please enter a valid number for Request ID.';
-        this.availableRequests = [];
       }
     } else {
       this.ldAddEventService.getRequestByName(term).subscribe({
@@ -157,7 +156,13 @@ export class LdAddEvent implements OnInit, OnDestroy {
     this.selectedRequests = this.selectedRequests.filter(req => req.requestId !== requestIdToRemove);
   }
 
+  navigateBackToEvents(): void {
+    this.router.navigate(['/ld-events']);
+  }
+
   ngOnDestroy(): void {
-    this.subscriptions.forEach(sub => sub.unsubscribe());
+    for (const sub of this.subscriptions) {
+      sub.unsubscribe();
+    }
   }
 }

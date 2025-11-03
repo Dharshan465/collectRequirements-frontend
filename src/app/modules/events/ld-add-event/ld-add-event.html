@@ -1,7 +1,10 @@
 <!-- src/app/modules/events/ld-add-event/ld-add-event.html -->
 
 <div class="add-event-container">
-  <h2>Create New Event</h2>
+  <div class="header-section">
+    <h2>Create New Event</h2>
+    <button class="back-to-events-button" (click)="navigateBackToEvents()">Back to Events</button>
+  </div>
 
   <form (ngSubmit)="onSubmit()" #eventForm="ngForm">
     <div class="form-section">

@@ -103,7 +103,7 @@ export class LcDashboard implements OnInit {
 
   navigateToNewRequirement(): void {
     const url = `/dashboard/lc/${this.lcUserId}/create`;
-    window.location.href = url;
+    globalThis.location.href = url;
   }
 
 }

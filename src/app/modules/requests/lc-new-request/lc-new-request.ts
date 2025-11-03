@@ -72,9 +72,9 @@ export class LcNewRequest implements OnInit, OnDestroy {
   }
 
 get lcUserId(): number {
-    const urlSegments = window.location.pathname.split('/');
+    const urlSegments = globalThis.location.pathname.split('/');
     const userIdIndex = urlSegments.indexOf('lc') + 1;
-    return userIdIndex > 0 ? parseInt(urlSegments[userIdIndex], 10) : NaN;
+    return userIdIndex > 0 ? Number.parseInt(urlSegments[userIdIndex], 10) : Number.NaN;
   }
 
  openUserSelectionPopup(): void {
