@@ -42,15 +42,15 @@ export class LdViewEventComponent implements OnInit {
   error: string | null = null;
 
   constructor(
-    private route: ActivatedRoute,
-    private viewEventService: ViewEventService,
-    private router: Router
+    private readonly route: ActivatedRoute,
+    private readonly viewEventService: ViewEventService,
+    private readonly router: Router
   ) {}
 
   ngOnInit(): void {
     const eventId = this.route.snapshot.paramMap.get('id');
     if (eventId) {
-      this.fetchEventData(parseInt(eventId, 10));
+      this.fetchEventData(Number.parseInt(eventId, 10));
     }
   }
 
@@ -127,5 +127,9 @@ export class LdViewEventComponent implements OnInit {
     if (eventId) {
       this.router.navigate([`/events/edit/${eventId}`]);
     }
+  }
+
+  navigateBackToEvents(): void {
+    this.router.navigate(['/ld-events']);
   }
 }

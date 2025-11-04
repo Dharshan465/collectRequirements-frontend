@@ -29,6 +29,8 @@ export class LcDashboard implements OnInit {
 
   requestCounts: RequestCounts = {} as RequestCounts;
   requestDetails: RequestDetails[] = [];
+  filteredRequestDetails: RequestDetails[] = []; // For display
+  allRequestDetails: RequestDetails[] = []; // For maintaining filter options
 
   constructor(private readonly requestService: Request) { }
 
@@ -61,11 +63,28 @@ export class LcDashboard implements OnInit {
       this.filterToDate || undefined
     ).subscribe({
       next: (data) => {
-        this.requestDetails = data;
+        this.allRequestDetails = data; // Store all requests for filter options
+        this.requestDetails = data; // Store all for template compatibility
+        this.applyMainViewFilter(); // Apply filtering for main view
         this.populateFilterOptions(); 
       },
       error: (err) => console.error(`Error fetching requests for LC User ID: ${this.lcUserId}`, err)
     });
+  }
+
+  applyMainViewFilter(): void {
+    // If no specific status filter is applied, hide rejected/closed requests
+    if (!this.filterStatus) {
+      this.filteredRequestDetails = this.requestDetails.filter(request => 
+        request.requestStatus !== 'REJECTED' && 
+        request.requestStatus !== 'CLOSED' &&
+        request.requestStatus !== 'Rejected' &&
+        request.requestStatus !== 'Closed'
+      );
+    } else {
+      // If user is searching for specific status, show all matching results
+      this.filteredRequestDetails = this.requestDetails;
+    }
   }
 
   populateFilterOptions(): void {
@@ -77,7 +96,8 @@ export class LcDashboard implements OnInit {
     const departmentSet = new Set<string>();
     const eventSet = new Set<string>();
 
-    for (const detail of this.requestDetails) {
+    // Use all requests (including rejected) for filter options
+    for (const detail of this.allRequestDetails) {
       if (detail.requestStatus) statusSet.add(detail.requestStatus);
       if (detail.departmentName) departmentSet.add(detail.departmentName);
       if (detail.eventName) eventSet.add(detail.eventName);
@@ -101,9 +121,14 @@ export class LcDashboard implements OnInit {
     this.loadRequests(); 
   }
 
+  // Method to refresh the main view filter when filters change
+  onFilterChange(): void {
+    this.loadRequests();
+  }
+
   navigateToNewRequirement(): void {
     const url = `/dashboard/lc/${this.lcUserId}/create`;
-    window.location.href = url;
+    globalThis.location.href = url;
   }
 
 }

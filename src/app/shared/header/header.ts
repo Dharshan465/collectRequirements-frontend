@@ -1,4 +1,4 @@
-import { Component, ElementRef, Host, HostListener, OnInit } from '@angular/core';
+import { Component, ElementRef, HostListener, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-header',
@@ -17,7 +17,7 @@ export class Header implements OnInit{
 
   showDropdown: boolean = false;
 
-  constructor(private elementRef: ElementRef) {}
+  constructor(private readonly elementRef: ElementRef) {}
 
 	ngOnInit(): void {
     if (this.isLDUser()) {

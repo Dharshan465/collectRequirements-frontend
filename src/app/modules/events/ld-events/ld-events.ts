@@ -3,7 +3,6 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { LdEventsService, EventFilter } from '../../../service/events/ld-events-service';
 import { addEvent } from '../../../models/add-event'; // Updated import path and name
 import { CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { Subject, debounceTime, distinctUntilChanged, Subscription } from 'rxjs';
@@ -13,7 +12,6 @@ import { Subject, debounceTime, distinctUntilChanged, Subscription } from 'rxjs'
   standalone: true,
   imports: [
     CommonModule,
-    HttpClientModule,
     FormsModule
   ],
   templateUrl: './ld-events.html',
@@ -30,10 +28,10 @@ export class LdEvents implements OnInit, OnDestroy {
   filterEventType: string = '';
   filterStatus: string = '';
 
-  private searchTerms = new Subject<string>();
-  private subscriptions: Subscription[] = [];
+  private readonly searchTerms = new Subject<string>();
+  private readonly subscriptions: Subscription[] = [];
 
-  constructor(private ldEventsService: LdEventsService, private router: Router) { }
+  constructor(private readonly ldEventsService: LdEventsService, private readonly router: Router) { }
 
   ngOnInit(): void {
     this.fetchEvents();
@@ -49,7 +47,9 @@ export class LdEvents implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.subscriptions.forEach(sub => sub.unsubscribe());
+    for (const sub of this.subscriptions) {
+      sub.unsubscribe();
+    }
   }
 
   fetchEvents(): void {
@@ -63,12 +63,12 @@ export class LdEvents implements OnInit, OnDestroy {
       status: this.filterStatus.trim(),
     };
 
-    Object.keys(filters).forEach(key => {
+    for (const key of Object.keys(filters)) {
       const filterKey = key as keyof EventFilter;
       if (!filters[filterKey]) {
         delete filters[filterKey];
       }
-    });
+    }
 
     this.ldEventsService.getAllEvents(filters).subscribe({
       next: (data: addEvent[]) => { // Use addEvent[]
@@ -103,19 +103,38 @@ export class LdEvents implements OnInit, OnDestroy {
     this.router.navigate(['/ld-add-event']);
   }
 
-  // inside LdEvents component class (ld-events.ts)
+  navigateBackToDashboard(): void {
+    this.router.navigate(['/dashboard/ld/21']);
+  }
 
-  // src/app/modules/events/ld-events/ld-events.ts
-    navigateToDeleteEvent(id: number | undefined): void {
-      if (id == null) {
-        console.warn('navigateToDeleteEvent called without an id');
-        return;
-      }
-      // navigate to the route you actually defined
-      this.router.navigate(['/events/delete', id]);
+  navigateToViewEvent(eventId: number | undefined): void {
+    if (eventId) {
+      this.router.navigate(['/events/view', eventId]);
+    } else {
+      console.error('Event ID is required for viewing');
     }
+  }
 
+  navigateToEditEvent(eventId: number | undefined): void {
+    if (eventId) {
+      this.router.navigate(['/events/edit', eventId]);
+    } else {
+      console.error('Event ID is required for editing');
+    }
+  }
 
-
-
+  deleteEvent(eventId: number | undefined): void {
+    if (!eventId) {
+      console.error('Event ID is required for deletion');
+      return;
+    }
+    
+    if (confirm('Are you sure you want to delete this event?')) {
+      // Implementation for delete functionality will be added when backend API is available
+      console.log('Delete event with ID:', eventId);
+      alert('Not Implemented');
+      // After successful deletion, refresh the events list
+      // this.fetchEvents();
+    }
+  }
 }

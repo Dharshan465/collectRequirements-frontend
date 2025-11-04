@@ -1,56 +1,68 @@
-<div class="page-root">
+<div class="edit-event-container">
+  <div class="header-section">
+    <h1>Edit Event Details</h1>
+    <button class="back-to-events-button" (click)="navigateBackToEvents()">Back to Events</button>
+  </div>
 
+  <div *ngIf="loading" class="loading-state">
+    <div class="loading-spinner"></div>
+    <p>Loading event details...</p>
+  </div>
+  
+  <div *ngIf="error" class="error-state">
+    <h3>Error Loading Event</h3>
+    <p>{{ error }}</p>
+  </div>
 
-    <main class="content">
-        <div *ngIf="loading" class="loading">Loading event details...</div>
-        <div *ngIf="error" class="error">{{ error }}</div>
+  <div *ngIf="event && !loading && !error" class="event-content">
+    <div class="form-section">
+      <h2>Event Details</h2>
+      <div class="form-content">
+        <div class="form-group">
+          <label for="eventName">Event Name:</label>
+          <input type="text" id="eventName" [(ngModel)]="event.eventName" />
+        </div>
 
-        <section class="card" *ngIf="event && !loading">
-            <h2 class="card-title">Edit Event Details</h2>
-            <div class="event-grid">
-                <div class="grid-row">
-                    <div class="label-pill">Event Name</div>
-                    <input class="value-box" [(ngModel)]="event.eventName" />
-                </div>
+        <div class="form-group">
+          <label for="eventDescription">Description:</label>
+          <textarea id="eventDescription" [(ngModel)]="event.description"></textarea>
+        </div>
 
-                <div class="grid-row">
-                    <div class="label-pill">Description</div>
-                    <textarea class="value-box description" [(ngModel)]="event.description"></textarea>
-                </div>
+        <div class="form-group">
+          <label for="participants">Participants:</label>
+          <input type="number" id="participants" [(ngModel)]="event.participantsCount" />
+        </div>
 
-                <div class="grid-row">
-                    <div class="label-pill">Participants</div>
-                    <input class="value-box" type="number" [(ngModel)]="event.participantsCount" />
-                </div>
+        <div class="form-group">
+          <label for="duration">Duration:</label>
+          <input type="text" id="duration" [(ngModel)]="event.duration" />
+        </div>
 
-                <div class="grid-row">
-                    <div class="label-pill">Duration</div>
-                    <input class="value-box" [(ngModel)]="event.duration" />
-                </div>
+        <div class="form-group">
+          <label for="eventType">Event Type:</label>
+          <input type="text" id="eventType" [(ngModel)]="event.eventType" />
+        </div>
 
-                <div class="grid-row">
-                    <div class="label-pill">Event Type</div>
-                    <input class="value-box" [(ngModel)]="event.eventType" />
-                </div>
+        <div class="form-group">
+          <label for="fundingSource">Funding Source:</label>
+          <input type="text" id="fundingSource" [(ngModel)]="event.fundingSource" />
+        </div>
+      </div>
+    </div>
 
-                <div class="grid-row">
-                    <div class="label-pill">Funding Source</div>
-                    <input class="value-box" [(ngModel)]="event.fundingSource" />
-                </div>
-            </div>
+    <div class="form-actions">
+      <button class="cancel-button" (click)="navigateBackToEvents()">Cancel</button>
+      <button class="submit-button" (click)="saveEvent()">Save Changes</button>
+    </div>
+  </div>
+  
+  <div class="form-section">
+    <h2>Related Requests</h2>
+    <div class="form-content">
+      <div *ngIf="requests.length === 0" class="no-requests-message">No requests found for this event.</div>
 
-            <div class="button-container">
-                <button class="save-button" (click)="saveEvent()">Save Changes</button>
-            </div>
-        </section>
-
-        <section class="card requests" *ngIf="!loading">
-            <h3 class="card-title">Related Requests</h3>
-
-            <div *ngIf="requests.length === 0" class="empty">No requests found for this event.</div>
-
-            <div class="table-wrap" *ngIf="requests.length > 0">
-                <table class="requests-table">
+      <div class="requests-table" *ngIf="requests.length > 0">
+        <table>
                     <thead>
                         <tr>
                             <th>Req ID</th>
@@ -63,6 +75,7 @@
                             <th>Associates</th>
                             <th>TAN</th>
                             <th>Curriculum</th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -73,8 +86,8 @@
                             <td>{{ r.requestDate | date:'medium' }}</td>
                             <td>{{ r.requestStatus }}</td>
                             <td>{{ r.groupRequest ? 'Yes' : 'No' }}</td>
-                            <td class="nowrap">{{ r.justification }}</td>
-                            <td class="center">{{ r.noOfAssociates ?? '-' }}</td>
+                            <td>{{ r.justification }}</td>
+                            <td>{{ r.noOfAssociates }}</td>
                             <td>{{ r.tanNumber }}</td>
                             <td>{{ r.curriculumLink || '-' }}</td>
                             <td>
@@ -93,7 +106,6 @@
             <div class="button-container">
                 <button class="add-request-button" (click)="addRequest()">Add Request</button>
             </div>
-        </section>
-    </main>
-
+        </div>
+    </div>
 </div>

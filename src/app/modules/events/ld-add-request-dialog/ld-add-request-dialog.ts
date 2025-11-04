@@ -34,8 +34,8 @@ import { MatButtonModule } from '@angular/material/button';
           <tbody>
             <tr *ngFor="let request of requests">
               <td>{{ request.requestId }}</td>
-              <td>{{ request.requestorId }}</td>
-              <td>{{ request.departmentId }}</td>
+              <td>{{ request.requestorId || 'N/A' }}</td>
+              <td>{{ request.departmentName || request.departmentId || 'N/A' }}</td>
               <td>{{ request.requestDate | date:'medium' }}</td>
               <td>{{ request.groupRequest ? 'Yes' : 'No' }}</td>
               <td>{{ request.noOfAssociates }}</td>
@@ -59,8 +59,10 @@ import { MatButtonModule } from '@angular/material/button';
   `,
   styles: [`
     .dialog-container {
-      padding: 1.5rem;
-      max-width: 1000px;
+      padding: 24px;
+      width: 100%;
+      box-sizing: border-box;
+      overflow: hidden;
     }
 
     .dialog-title {
@@ -70,15 +72,37 @@ import { MatButtonModule } from '@angular/material/button';
       font-weight: 500;
     }
 
+    .requests-list {
+      width: 100%;
+      margin: 0 auto;
+      overflow: auto;
+      max-height: 60vh;
+    }
+
     .requests-table {
       width: 100%;
       border-collapse: collapse;
       margin-bottom: 1.5rem;
       background-color: white;
       border-radius: 8px;
-      overflow: hidden;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      table-layout: fixed;
     }
+    
+    .requests-table th:nth-child(1),
+    .requests-table td:nth-child(1) { width: 10%; }  /* Request ID */
+    .requests-table th:nth-child(2),
+    .requests-table td:nth-child(2) { width: 15%; }  /* Requestor */
+    .requests-table th:nth-child(3),
+    .requests-table td:nth-child(3) { width: 20%; }  /* Department */
+    .requests-table th:nth-child(4),
+    .requests-table td:nth-child(4) { width: 25%; }  /* Request Date */
+    .requests-table th:nth-child(5),
+    .requests-table td:nth-child(5) { width: 10%; }  /* Group */
+    .requests-table th:nth-child(6),
+    .requests-table td:nth-child(6) { width: 10%; }  /* Associates */
+    .requests-table th:nth-child(7),
+    .requests-table td:nth-child(7) { width: 10%; }  /* Action */
 
     .requests-table th,
     .requests-table td {
@@ -185,9 +209,9 @@ export class LdAddRequestDialogComponent implements OnInit {
   loadingRequests: Set<number> = new Set();
 
   constructor(
-    private viewEventService: ViewEventService,
-    @Inject(MAT_DIALOG_DATA) private data: { eventId: number },
-    private dialogRef: MatDialogRef<LdAddRequestDialogComponent>
+    private readonly viewEventService: ViewEventService,
+    @Inject(MAT_DIALOG_DATA) private readonly data: { eventId: number },
+    private readonly dialogRef: MatDialogRef<LdAddRequestDialogComponent>
   ) {}
 
   ngOnInit(): void {
@@ -204,9 +228,9 @@ export class LdAddRequestDialogComponent implements OnInit {
         const requestsData = response.data || response || [];
         this.requests = requestsData.map((req: any) => ({
           requestId: req.requestId || req.id || 0,
-          requestorId: req.requestorId || 0,
-          departmentId: req.department.departmentId || 0,
-          departmentName: req.departmentName || '',
+          requestorId: req.user?.userId || req.requestorId || 0,
+          departmentId: req.department?.departmentId || req.departmentId || 0,
+          departmentName: req.department?.departmentName || req.departmentName || '',
           eventId: req.eventId || 0,
           requestDate: req.requestDate || '',
           requestStatus: req.requestStatus || '',

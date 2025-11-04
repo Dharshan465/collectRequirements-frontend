@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { RequestCounts } from '../../../models/request-counts';
 import { Request } from '../../../services/requests/request';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RequestDetails } from '../../../models/request-details';
+import { EditRequest } from '../../../models/edit-request';
 
 @Component({
   selector: 'app-ld-dashboard',
@@ -25,14 +27,20 @@ export class LdDashboard implements OnInit {
   
     requestCounts: RequestCounts = {} as RequestCounts;
     requestDetails: RequestDetails[] = [];
+    allRequestDetails: RequestDetails[] = []; // Store all requests for filter options
 
   availableStatuses: string[] = [];
   availableDepartments: string[] = [];
   availableEvents: string[] = [];
   availableRequestorNames: string[] = [];
 
+  // Properties for delete confirmation
+  showDeleteConfirmation: boolean = false;
+  requestToDelete: number | null = null;
+  isDeleting: boolean = false;
 
-  constructor(private readonly requestService: Request) { }
+
+  constructor(private readonly requestService: Request, private readonly router: Router) { }
 
   ngOnInit() {
     this.loadDashboard();
@@ -62,7 +70,17 @@ export class LdDashboard implements OnInit {
       this.filterToDate
     ).subscribe({
               next: (data) => {
-                this.requestDetails = data;
+                // Store all requests for filter options
+                this.allRequestDetails = data;
+                
+                // Filter out rejected requests unless specifically searching for them
+                if (!this.filterStatus || this.filterStatus.toUpperCase() !== 'REJECTED') {
+                  this.requestDetails = data.filter(request => 
+                    request.requestStatus.toUpperCase() !== 'REJECTED'
+                  );
+                } else {
+                  this.requestDetails = data;
+                }
                 this.populateFilterOptions();
       },
       error: (err) => console.error('Error fetching request details', err)
@@ -84,8 +102,8 @@ export class LdDashboard implements OnInit {
     const eventSet = new Set<string>();
     const requestorNameSet = new Set<string>();
 
-
-    for (const detail of this.requestDetails) {
+    // Use all requests (including rejected) for filter options
+    for (const detail of this.allRequestDetails) {
       if (detail.requestStatus) statusSet.add(detail.requestStatus);
       if (detail.departmentName) departmentSet.add(detail.departmentName);
       if (detail.eventName) eventSet.add(detail.eventName);
@@ -114,22 +132,86 @@ export class LdDashboard implements OnInit {
   }
 
   navigateToNewRequirement(): void {
-    // Logic to navigate to the new requirement page
+    this.router.navigate([`/dashboard/ld/${this.ldUserId}/create`]);
+  }
+
+  navigateToEvents(): void {
+    this.router.navigate(['/ld-events']);
   }
 
   onEdit(requestId: number): void {
     console.log(`Edit clicked for Request ID: ${requestId}`);
-    // Implement navigation to edit page
+    this.router.navigate(['/requests/edit', requestId]);
   }
 
   onView(requestId: number): void {
     console.log(`View clicked for Request ID: ${requestId}`);
-    // Implement navigation to view page
+    this.router.navigate(['/requests/view', requestId]);
   }
 
   onDelete(requestId: number): void {
     console.log(`Delete clicked for Request ID: ${requestId}`);
-    // Implement delete functionality
+    this.requestToDelete = requestId;
+    this.showDeleteConfirmation = true;
+  }
+
+  confirmDelete(): void {
+    if (!this.requestToDelete) return;
+    
+    this.isDeleting = true;
+    
+    // Find the request to update its status
+    const request = this.requestDetails.find(r => r.requestId === this.requestToDelete);
+    if (!request) {
+      this.isDeleting = false;
+      this.cancelDelete();
+      alert('Request not found');
+      return;
+    }
+
+    // Create update payload to change status to REJECTED
+    const updatePayload: EditRequest = {
+      requestId: this.requestToDelete,
+      requestorId: request.requestorId,
+      approvedBy: this.ldUserId, // Current LnD user
+      departmentId: request.departmentId,
+      eventId: request.eventId || 0,
+      requestDate: request.requestDate,
+      requestStatus: 'REJECTED', // Change status to REJECTED for proper count tracking
+      groupRequest: request.groupRequest,
+      justification: request.justification,
+      curriculamLink: request.curriculumLink || '',
+      tan_Number: request.tanNumber,
+      requestedParticipants: [] // Empty array since we're rejecting
+    };
+
+    // Call the edit API to update status to REJECTED
+    this.requestService.editRequest(this.requestToDelete, updatePayload).subscribe({
+      next: (response) => {
+        console.log('Request status changed to REJECTED:', response);
+        
+        // Remove from current view (since rejected requests are hidden)
+        this.requestDetails = this.requestDetails.filter(r => r.requestId !== this.requestToDelete);
+        
+        this.isDeleting = false;
+        this.cancelDelete();
+        alert('Request has been rejected and hidden from view');
+        
+        // Reload dashboard to update counts
+        this.loadDashboard();
+      },
+      error: (error) => {
+        console.error('Error rejecting request:', error);
+        this.isDeleting = false;
+        this.cancelDelete();
+        alert('Failed to reject request. Please try again.');
+      }
+    });
+  }
+
+  cancelDelete(): void {
+    this.showDeleteConfirmation = false;
+    this.requestToDelete = null;
   }
 
 }

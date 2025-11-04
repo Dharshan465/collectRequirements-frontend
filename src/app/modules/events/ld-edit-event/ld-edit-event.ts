@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ViewEventService } from '../../../service/viewEvents/view-event-service';
 import { Event, Request } from '../ld-view-event/ld-view-event';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
@@ -22,16 +22,21 @@ export class LdEditEventComponent implements OnInit {
   removingRequests: Set<number> = new Set();
 
   constructor(
-    private route: ActivatedRoute,
-    private viewEventService: ViewEventService,
-    private dialog: MatDialog
+    private readonly route: ActivatedRoute,
+    private readonly viewEventService: ViewEventService,
+    private readonly dialog: MatDialog,
+    private readonly router: Router
   ) {}
 
   ngOnInit(): void {
     const eventId = this.route.snapshot.paramMap.get('id');
     if (eventId) {
-      this.fetchEventData(parseInt(eventId, 10));
+      this.fetchEventData(Number.parseInt(eventId, 10));
     }
+  }
+
+  navigateBackToEvents(): void {
+    this.router.navigate(['/ld-events']);
   }
 
   private fetchEventData(eventId: number): void {
@@ -62,9 +67,9 @@ export class LdEditEventComponent implements OnInit {
         
         this.requests = requestsData.map((req: any) => ({
           requestId: req.requestId || req.id || 0,
-          requestorId: req.requestorId || 0,
-          departmentId: req.department.departmentId || 0,
-          departmentName: req.departmentName || '',
+          requestorId: req.user?.userId || req.requestorId || 0,
+          departmentId: req.department?.departmentId || req.departmentId || 0,
+          departmentName: req.department?.departmentName || req.departmentName || '',
           eventId: req.eventId || 0,
           requestDate: req.requestDate || '',
           requestStatus: req.requestStatus || '',
@@ -111,7 +116,8 @@ export class LdEditEventComponent implements OnInit {
 
     console.log('Opening add request dialog for event:', this.event.eventId);
     const dialogRef = this.dialog.open(LdAddRequestDialogComponent, {
-      width: '1000px',
+      width: '90%',
+      maxWidth: '1400px',
       data: { eventId: this.event.eventId }
     });
 

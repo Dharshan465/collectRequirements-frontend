@@ -1,289 +1,220 @@
-/* src/app/modules/events/ld-events/ld-events.css */
+/* ld-events.css - Following dashboard format */
 
-/* Overall Container Styling */
-.events-dashboard-container {
-  padding: 30px;
-  font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  max-width: 1300px;
-  margin: 30px auto;
-  background-color: #f8f9fa;
-  border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+.dashboard-container {
+  font-family: Arial, sans-serif;
+  padding: 15px;
+  width: 90%;
+  margin: auto;
+  overflow-x: hidden;
 }
 
-/* Dashboard Header for title and button */
 .dashboard-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 10px;
 }
 
-/* Heading Styling */
-h2 {
-  color: #212529;
+.dashboard-header h1 {
   margin: 0;
-  font-size: 2.2em;
-  font-weight: 600;
-  letter-spacing: 0.5px;
+  font-size: 28px;
+  color: #333;
 }
 
-/* Add Event Button Styling */
-.add-event-button {
-  background-color: #28a745;
+.header-buttons {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+/* Back Button Styling */
+.back-button {
+  background-color: #040c5c; /* Ford blue */
   color: #ffffff;
   border: none;
   padding: 10px 20px;
   border-radius: 5px;
   font-size: 1em;
+  font-family: Arial, sans-serif;
+  font-weight: bold;
   cursor: pointer;
-  transition: background-color 0.2s ease-in-out, transform 0.2s ease-in-out;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease;
+}
+
+.back-button:hover {
+  background-color: #002a7b;
+}
+
+/* Add Event Button Styling */
+.add-event-button {
+  background-color: #28a745; /* Green for adding */
+  color: #ffffff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-size: 1em;
+  font-family: Arial, sans-serif;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
 .add-event-button:hover {
   background-color: #218838;
-  transform: translateY(-1px);
 }
 
-.add-event-button:active {
-  background-color: #1e7e34;
-  transform: translateY(0);
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-}
-
-/* Filter Section Styling */
-.filter-section {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px; /* This is the key for spacing between items */
-  margin-bottom: 30px;
+/* Filter Section - Following dashboard format */
+.request-filters {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 15px 30px;
+  margin-bottom: 25px;
   padding: 20px;
-  background-color: #e9f5ff;
+  background-color: #e9ecef;
   border-radius: 8px;
-  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
-  align-items: flex-end; /* Align items to the bottom */
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .filter-group {
   display: flex;
   flex-direction: column;
-  /* Refined flex properties for better control */
-  flex: 0 0 calc(25% - 15px); /* Each group takes approx 25% width, accounting for 20px gap */
-  min-width: 180px; /* Minimum width before wrapping to ensure readability */
-  max-width: 100%; /* Prevent individual items from getting too wide within their column */
-}
-
-/* Responsive adjustments for filter groups */
-@media (max-width: 1200px) {
-  .filter-group {
-    flex: 0 0 calc(33.33% - 13.33px); /* 3 items per row on medium screens */
-  }
-}
-
-@media (max-width: 992px) {
-  .filter-group {
-    flex: 0 0 calc(50% - 10px); /* 2 items per row on tablets */
-  }
-}
-
-@media (max-width: 768px) {
-  .filter-group {
-    flex: 0 0 100%; /* 1 item per row on mobile */
-    max-width: 100%;
-  }
-  .filter-actions {
-    flex: 0 0 100%; /* Ensure clear button also takes full width */
-  }
+  justify-content: flex-end;
 }
 
 .filter-group label {
-  font-weight: 500;
-  margin-bottom: 8px;
+  font-weight: bold;
+  margin-bottom: 5px;
   color: #333;
-  font-size: 0.95em;
+  font-size: 14px;
 }
 
-.filter-section input[type="text"],
-.filter-section select {
-  padding: 10px 12px;
-  border: 1px solid #ced4da;
+.request-filters input[type="text"],
+.request-filters select {
+  width: 100%;
+  padding: 10px 15px;
+  font-size: 15px;
+  border: 1px solid #ccc;
   border-radius: 5px;
-  font-size: 0.9em;
-  color: #495057;
-  background-color: #fff;
-  transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-  width: 100%; /* Ensure inputs take full width of their group */
-  box-sizing: border-box; /* Include padding and border in the element's total width and height */
-}
-
-.filter-section input[type="text"]:focus,
-.filter-section select:focus {
-  border-color: #80bdff;
-  outline: 0;
-  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+  box-sizing: border-box;
+  background-color: #ffffff;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20256%20256%22%3E%3Cpath%20fill%3D%22%23333%22%20d%3D%22M208.5%2080.5L128%20161L47.5%2080.5z%22%2F%3E%3C%2Fsvg%3E');
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 12px;
+  padding-right: 30px;
 }
 
 .filter-actions {
   display: flex;
-  align-items: flex-end; /* Align button to the bottom of the filter section */
-  padding-bottom: 2px; /* Small adjustment for visual alignment with input fields */
-  /* Ensure this button container doesn't take up too much flexible space */
-  flex-grow: 0;
-  flex-shrink: 0;
-  flex-basis: auto; /* Let it take only the space it needs */
+  justify-content: flex-start;
+  gap: 10px;
+  align-items: flex-end;
+  grid-column: span 1;
 }
 
 .clear-filters-button {
-  background-color: #6c757d;
+  flex: 0 0 auto;
+  min-width: 100px;
+  padding: 10px 15px;
+  font-size: 15px;
   color: #ffffff;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 5px;
-  font-size: 1em;
   cursor: pointer;
-  transition: background-color 0.2s ease-in-out, transform 0.2s ease-in-out;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
-  white-space: nowrap; /* Prevent button text from wrapping */
+  border: none;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+  background-color: #6c757d; /* Neutral gray for "Clear" action */
 }
 
 .clear-filters-button:hover {
   background-color: #5a6268;
-  transform: translateY(-1px);
 }
 
-.clear-filters-button:active {
-  background-color: #4e555b;
-  transform: translateY(0);
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
-}
-
-/* Table Styling */
-.events-table {
-  width: 100%;
-  border-collapse: separate;
-  border-spacing: 0;
-  margin-top: 25px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  background-color: #ffffff;
+/* Table Styling - Following dashboard format */
+.requests-table {
+  position: relative;
   border-radius: 8px;
-  overflow: hidden;
-  /* Added for horizontal scroll */
-  display: block; /* Make table a block element to allow overflow */
-  overflow-x: auto; /* Enable horizontal scrolling */
-  white-space: nowrap; /* Prevent content from wrapping */
+  border: 1px solid #ddd;
+  margin-bottom: 20px;
+  background-color: #ffffff;
+  max-height: 550px;
+  overflow-y: auto;
+  max-width: 100%;
 }
 
-.events-table th,
-.events-table td {
-  white-space: nowrap; /* Ensure content in cells stays on one line */
+table {
+  width: 100%;
+  border-collapse: collapse;
 }
 
-.events-table .action-button {
-  padding: 6px 12px;
-  border-radius: 4px;
-  font-size: 0.85em;
-  margin-right: 5px; /* Space between buttons */
-  white-space: nowrap; /* Prevent button text from wrapping */
-}
-
-.events-table .action-button:last-child {
-  margin-right: 0; /* No margin after the last button */
-}
-
-/* Specific styles for View button */
-.events-table .action-button.view {
-  background-color: #007bff; /* Blue */
-  color: white;
-  border: 1px solid #007bff;
-}
-
-.events-table .action-button.view:hover {
-  background-color: #0056b3;
-  border-color: #0056b3;
-}
-
-/* Specific styles for Edit button */
-.events-table .action-button.edit {
-  background-color: #ffc107; /* Yellow/Orange */
-  color: #343a40; /* Dark text for contrast */
-  border: 1px solid #ffc107;
-}
-
-.events-table .action-button.edit:hover {
-  background-color: #e0a800;
-  border-color: #e0a800;
-}
-
-/* Specific styles for Delete button */
-.events-table .action-button.delete {
-  background-color: #dc3545; /* Red */
-  color: white;
-  border: 1px solid #dc3545;
-}
-
-.events-table .action-button.delete:hover {
-  background-color: #c82333;
-  border-color: #c82333;
-}
-
-
-/* Table Header Styling */
-.events-table th {
-  background-color: #007bff;
+table th {
+  background-color: #040c5c; /* Ford blue for headers */
   color: #ffffff;
-  font-weight: 600;
-  padding: 15px 20px;
+  font-weight: bold;
+  border: 1px solid #040c5c;
+  padding: 12px 8px;
   text-align: left;
+  white-space: nowrap;
   position: sticky;
   top: 0;
-  z-index: 2;
-  letter-spacing: 0.3px;
-  font-size: 0.95em;
+  z-index: 5;
 }
 
-/* First and Last Header Cell specific styling for rounded corners */
-.events-table th:first-child {
-  border-top-left-radius: 8px;
-}
-
-.events-table th:last-child {
-  border-top-right-radius: 8px;
-}
-
-/* Table Data Cell Styling */
-.events-table td {
-  border-bottom: 1px solid #e9ecef;
-  padding: 14px 20px;
+table td {
+  border: 1px solid #ddd;
+  padding: 8px;
   text-align: left;
-  color: #343a40;
-  font-size: 0.9em;
-  line-height: 1.4;
+  background-color: #ffffff;
+  white-space: nowrap;
 }
 
-/* Alternating Row Colors (Zebra Striping) */
-.events-table tbody tr:nth-child(even) {
-  background-color: #f2f7fc;
+table tr {
+  background-color: #ffffff;
 }
 
-/* Row Hover Effect */
-.events-table tbody tr:hover {
-  background-color: #e0f2ff;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  transition: all 0.2s ease-in-out;
-}
-
-/* Specific styling for the last row's cells for rounded corners */
-.events-table tbody tr:last-child td:first-child {
+.no-data {
+  text-align: center;
+  font-style: italic;
+  color: #666;
+  padding: 20px;
+  background-color: #ffffff;
+  border-left: 1px solid #ddd;
+  border-right: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
   border-bottom-left-radius: 8px;
-}
-
-.events-table tbody tr:last-child td:last-child {
   border-bottom-right-radius: 8px;
 }
 
-/* Messages (Loading, Error, No Events) Styling */
+/* Action Buttons */
+.action-buttons-cell {
+  display: flex;
+  gap: 5px;
+}
+
+.action-btn {
+  padding: 10px 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.85em;
+  color: white;
+}
+
+.view-btn { background-color: #6c757d; } /* Gray */
+.view-btn:hover { background-color: #5a6268; }
+
+.edit-btn { background-color: #007bff; } /* Blue */
+.edit-btn:hover { background-color: #0056b3; }
+
+.delete-btn { background-color: #dc3545; } /* Red */
+.delete-btn:hover { background-color: #c82333; }
+
+/* Messages */
 .loading-message,
 .error-message,
 .no-events-message {

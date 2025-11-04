@@ -1,3 +1,5 @@
+import { UserParticipantDetails } from "./user-participant-details";
+
 export interface RequestDetails {
   requestId: number;
   requestorId: number;
@@ -13,4 +15,6 @@ export interface RequestDetails {
   noOfParticipants: number;
   tanNumber: string;
   curriculumLink: string;
+  participants: UserParticipantDetails[];
+
 }

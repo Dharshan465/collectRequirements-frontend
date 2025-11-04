@@ -1,1 +1,400 @@
-<p>ld-edit-request works!</p>
+<div class="edit-request-container">
+  <!-- Header Section -->
+  <header class="edit-header">
+    <h1>Edit Request</h1>
+    <button class="back-button" (click)="navigateBack()">
+      ← Back to Dashboard
+    </button>
+  </header>
+
+  <!-- Loading State -->
+  <div *ngIf="loading" class="loading-state">
+    <div class="loading-spinner"></div>
+    <p>Loading request details...</p>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="error && !loading" class="error-state">
+    <div class="error-icon">⚠️</div>
+    <h3>Error Loading Request</h3>
+    <p>{{ error }}</p>
+    <button class="retry-button" (click)="loadRequestDetails()">
+      Try Again
+    </button>
+  </div>
+
+  <!-- Request Edit Content -->
+  <div *ngIf="requestDetails && !loading && !error" class="request-content">
+    
+    <!-- Success Alert -->
+    <div *ngIf="showSuccessAlert && successMessage" class="alert alert-success">
+      <div class="alert-content">
+        <span class="alert-icon">✅</span>
+        <span>{{ successMessage }}</span>
+      </div>
+      <button class="alert-close-btn" (click)="closeAlert()">×</button>
+    </div>
+
+    <!-- Error Alert -->
+    <div *ngIf="showErrorAlert && error" class="alert alert-error">
+      <div class="alert-content">
+        <span class="alert-icon">❌</span>
+        <span>{{ error }}</span>
+      </div>
+      <button class="alert-close-btn" (click)="closeAlert()">×</button>
+    </div>
+    
+    <!-- Request Information Card (Read-only) -->
+    <section class="info-card readonly-card">
+      <h2>Request Information</h2>
+      <div class="info-grid">
+        <div class="info-item">
+          <span class="label">Request ID:</span>
+          <span class="value">{{ requestDetails.requestId }}</span>
+        </div>
+        
+        <div class="info-item">
+          <span class="label">Request Date:</span>
+          <span class="value">{{ requestDetails.requestDate | date:'medium' }}</span>
+        </div>
+        
+        <div class="info-item">
+          <span class="label">Request Type:</span>
+          <span class="value">{{ requestDetails.groupRequest ? 'Group Request' : 'Individual Request' }}</span>
+        </div>
+        
+        <div class="info-item">
+          <span class="label">Current Participants:</span>
+          <span class="value participant-count">{{ requestDetails.noOfParticipants }}</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Requestor Information Card (Read-only) -->
+    <section class="info-card readonly-card">
+      <h2>Requestor Information</h2>
+      <div class="info-grid">
+        <div class="info-item">
+          <span class="label">Requestor ID:</span>
+          <span class="value">{{ requestDetails.requestorId }}</span>
+        </div>
+        
+        <div class="info-item">
+          <span class="label">Requestor Name:</span>
+          <span class="value" [class.unknown-info]="!requestDetails.requestorName || requestDetails.requestorName === 'Unknown Requestor'">
+            {{ requestDetails.requestorName }}
+          </span>
+        </div>
+        
+        <div class="info-item">
+          <span class="label">Department:</span>
+          <span class="value" [class.unknown-info]="!requestDetails.departmentName || requestDetails.departmentName === 'Unknown Department'">
+            {{ requestDetails.departmentName }}
+          </span>
+        </div>
+        
+        <div class="info-item">
+          <span class="label">Event:</span>
+          <span class="value" [class.no-event]="!requestDetails.eventName || requestDetails.eventName === 'No Event Assigned'">
+            {{ requestDetails.eventName }}
+          </span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Editable Request Status Card -->
+    <section class="info-card editable-card">
+      <h2>Request Status</h2>
+      <div class="info-grid">
+        <div class="info-item">
+          <label for="requestStatus">Status:</label>
+          <select 
+            id="requestStatus" 
+            [(ngModel)]="requestDetails.requestStatus" 
+            class="edit-select">
+            <option *ngFor="let status of statusOptions" [value]="status.value">
+              {{ status.label }}
+            </option>
+          </select>
+        </div>
+        
+        <div class="info-item">
+          <span class="label">Status Preview:</span>
+          <span class="status-badge" [class]="getStatusBadgeClass(requestDetails.requestStatus)">
+            {{ requestDetails.requestStatus }}
+          </span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Editable Request Details Card -->
+    <section class="info-card editable-card">
+      <h2>Request Details</h2>
+      <div class="info-grid">
+        <div class="info-item full-width">
+          <label for="justification">Justification:</label>
+          <textarea 
+            id="justification" 
+            [(ngModel)]="requestDetails.justification" 
+            class="edit-textarea"
+            rows="4"
+            placeholder="Enter justification for this request..."
+            required></textarea>
+        </div>
+        
+        <div class="info-item">
+          <label for="tanNumber">TAN Number:</label>
+          <input 
+            type="text" 
+            id="tanNumber" 
+            [(ngModel)]="requestDetails.tanNumber" 
+            class="edit-input"
+            placeholder="Enter TAN number"
+            required>
+        </div>
+        
+        <div class="info-item">
+          <label for="curriculumLink">Curriculum Link:</label>
+          <input 
+            type="url" 
+            id="curriculumLink" 
+            [(ngModel)]="requestDetails.curriculumLink" 
+            class="edit-input"
+            placeholder="Enter curriculum link URL">
+        </div>
+      </div>
+    </section>
+
+    <!-- Participants Management Card -->
+    <section class="info-card participants-card">
+      <h2>Manage Participants</h2>
+      
+      <!-- Add Participants Section -->
+      <div class="add-participants-section">
+        <div class="add-participants-header">
+          <h3>Add Participants</h3>
+          <button 
+            class="add-participant-btn" 
+            type="button"
+            (click)="openAddParticipantModal()">
+            + Add Participants
+          </button>
+        </div>
+        <p class="add-participants-description">
+          Click "Add Participants" to search and select users to add to this request.
+        </p>
+      </div>
+
+      <!-- Current Participants Section -->
+      <div class="current-participants-section">
+        <h3>Current Participants ({{ participantsDetails.length }})</h3>
+        
+        <div *ngIf="participantsDetails.length === 0" class="no-participants">
+          <div class="empty-state">
+            <div class="empty-icon">👥</div>
+            <h4>No Participants</h4>
+            <p>This request has no participants. Add participants from the list above.</p>
+          </div>
+        </div>
+
+        <div *ngIf="participantsDetails.length > 0" class="participants-table-container">
+          <table class="participants-table">
+            <thead>
+              <tr>
+                <th>User ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Department</th>
+                <th>Manager</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let participant of participantsDetails; let i = index" 
+                  [class.odd-row]="i % 2 === 1">
+                <td>{{ participant.userId }}</td>
+                <td class="name-cell">{{ participant.userName }}</td>
+                <td class="email-cell">{{ participant.email }}</td>
+                <td>{{ participant.role }}</td>
+                <td>{{ participant.departmentName }}</td>
+                <td>{{ participant.managerName || 'N/A' }}</td>
+                <td>
+                  <button 
+                    class="remove-participant-btn" 
+                    (click)="removeParticipant(participant.userId)"
+                    type="button">
+                    Remove
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- Action Buttons -->
+    <section class="action-section">
+      <div class="action-buttons">
+        <button 
+          class="cancel-button" 
+          (click)="navigateBack()"
+          [disabled]="isSubmitting">
+          Cancel
+        </button>
+        
+        <button 
+          class="update-button" 
+          (click)="updateRequest()"
+          [disabled]="!isFormValid() || isSubmitting">
+          <span *ngIf="isSubmitting">Updating...</span>
+          <span *ngIf="!isSubmitting">Update Request</span>
+        </button>
+      </div>
+      
+      <div class="form-info">
+        <p *ngIf="!isFormValid()" class="validation-message">
+          Please fill in all required fields (Justification, TAN Number, Status) and ensure at least one participant is added.
+        </p>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- Add Participant Modal -->
+  <div *ngIf="showAddParticipantModal" 
+       class="modal-overlay" 
+       (click)="closeAddParticipantModal()"
+       (keydown.escape)="closeAddParticipantModal()">
+    <div class="modal-content" 
+         (click)="$event.stopPropagation()"
+         (keydown)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h2 id="modal-title">Add Participants</h2>
+        <button class="modal-close-btn" (click)="closeAddParticipantModal()">×</button>
+      </div>
+      
+      <div class="modal-body">
+        <!-- Search Section -->
+        <div class="search-section">
+          <div class="search-bar">
+            <input 
+              type="text" 
+              [(ngModel)]="searchQuery"
+              (input)="onSearchQueryChange()"
+              placeholder="Search by name, email, role, department, manager..."
+              class="search-input">
+            <span class="search-icon">🔍</span>
+          </div>
+          
+          <!-- Advanced Filters -->
+          <div class="filters-section">
+            <h4>Advanced Filters</h4>
+            <div class="filters-grid">
+              <div class="filter-item">
+                <label for="nameFilter">Name:</label>
+                <input 
+                  type="text" 
+                  id="nameFilter"
+                  [(ngModel)]="searchFilters.name"
+                  (input)="onFilterChange()"
+                  placeholder="Filter by name"
+                  class="filter-input">
+              </div>
+              
+              <div class="filter-item">
+                <label for="roleFilter">Role:</label>
+                <input 
+                  type="text" 
+                  id="roleFilter"
+                  [(ngModel)]="searchFilters.role"
+                  (input)="onFilterChange()"
+                  placeholder="Filter by role"
+                  class="filter-input">
+              </div>
+              
+              <div class="filter-item">
+                <label for="departmentFilter">Department:</label>
+                <input 
+                  type="text" 
+                  id="departmentFilter"
+                  [(ngModel)]="searchFilters.department"
+                  (input)="onFilterChange()"
+                  placeholder="Filter by department"
+                  class="filter-input">
+              </div>
+              
+              <div class="filter-item">
+                <label for="managerFilter">Manager:</label>
+                <input 
+                  type="text" 
+                  id="managerFilter"
+                  [(ngModel)]="searchFilters.manager"
+                  (input)="onFilterChange()"
+                  placeholder="Filter by manager"
+                  class="filter-input">
+              </div>
+              
+              <div class="filter-item">
+                <label for="regionFilter">Region:</label>
+                <input 
+                  type="text" 
+                  id="regionFilter"
+                  [(ngModel)]="searchFilters.region"
+                  (input)="onFilterChange()"
+                  placeholder="Filter by region"
+                  class="filter-input">
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Results Section -->
+        <div class="results-section">
+          <div class="results-header">
+            <h4>Available Users ({{ filteredUsers.length }})</h4>
+            <button 
+              class="clear-filters-btn" 
+              (click)="resetSearchFilters()"
+              *ngIf="searchQuery || searchFilters.name || searchFilters.role || searchFilters.department || searchFilters.manager || searchFilters.region">
+              Clear Filters
+            </button>
+          </div>
+          
+          <div *ngIf="filteredUsers.length === 0" class="no-results">
+            <div class="no-results-icon">🔍</div>
+            <h4>No Users Found</h4>
+            <p>Try adjusting your search criteria or filters.</p>
+          </div>
+          
+          <div *ngIf="filteredUsers.length > 0" class="users-list">
+            <button 
+              *ngFor="let user of filteredUsers" 
+              class="user-item"
+              type="button"
+              (click)="addParticipant(user)">
+              <div class="user-info">
+                <div class="user-name">{{ user.userName }}</div>
+                <div class="user-details">
+                  <span class="user-email">{{ user.email }}</span>
+                  <span class="user-role">{{ user.role }}</span>
+                </div>
+                <div class="user-meta">
+                  <span class="user-department">{{ user.departmentName }}</span>
+                  <span class="user-manager" *ngIf="user.managerName">Manager: {{ user.managerName }}</span>
+                  <span class="user-region" *ngIf="user.regionName">{{ user.regionName }}</span>
+                </div>
+              </div>
+              <span class="add-user-indicator">Add</span>
+            </button>
+          </div>
+        </div>
+      </div>
+      
+      <div class="modal-footer">
+        <button class="cancel-btn" (click)="closeAddParticipantModal()">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
