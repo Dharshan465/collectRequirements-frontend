@@ -2,6 +2,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { LdAddEventService } from '../../../service/addevent/ld-add-event';
 import { addEvent } from '../../../models/add-event';
@@ -15,6 +16,7 @@ import { debounceTime, distinctUntilChanged, Subject, Subscription } from 'rxjs'
   imports: [
     CommonModule,
     FormsModule,
+    HttpClientModule,
   ],
   templateUrl: './ld-add-event.html',
   styleUrl: './ld-add-event.css',
@@ -31,53 +33,50 @@ export class LdAddEvent implements OnInit, OnDestroy {
   };
 
   selectedRequests: addRequestToEvent[] = [];
-  // Store all requests that are initially available (approved, not assigned)
+  // Master list of all new, approved, unassigned requests fetched from the API
   private allNewApprovedRequests: addRequestToEvent[] = [];
-  availableRequests: addRequestToEvent[] = []; // This will be the displayed list
+  // The list currently displayed in the "Available Requests" table
+  availableRequests: addRequestToEvent[] = [];
 
   requestSearchTerm: string = '';
-  searchById: boolean = true;
+  searchById: boolean = true; // True for ID search, false for Name search
 
   isLoading: boolean = false;
   submitError: string | null = null;
   searchError: string | null = null;
 
-  private readonly requestSearchTerms = new Subject<string>();
-  private readonly subscriptions: Subscription[] = [];
+  private requestSearchTerms = new Subject<string>();
+  private subscriptions: Subscription[] = [];
 
   constructor(
-    private readonly ldAddEventService: LdAddEventService,
+    private ldAddEventService: LdAddEventService,
     public router: Router
   ) { }
 
   ngOnInit(): void {
-    // Fetch all new approved requests on component initialization
+    // 1. Load the initial master list of all eligible requests
     this.loadAllNewApprovedRequests();
 
+    // 2. Subscribe to search term changes for filtering
     this.subscriptions.push(
       this.requestSearchTerms.pipe(
         debounceTime(300),
         distinctUntilChanged()
-      ).subscribe(term => {
-        if (term.trim() === '') {
-          this.availableRequests = [];
-          this.searchError = null;
-        } else {
-          this.searchRequests();
-        }
+      ).subscribe(() => {
+        // Trigger the filtering logic whenever the search term changes (or is cleared)
+        this.searchRequests();
       })
     );
   }
 
+  // Fetches the initial master list of all new, approved, unassigned requests
   loadAllNewApprovedRequests(): void {
     this.isLoading = true;
     this.ldAddEventService.getAllNewApprovedRequestsNotAssignedToEvent().subscribe({
       next: (requests: addRequestToEvent[]) => {
-        // Filter out any requests that are already in selectedRequests
-        this.allNewApprovedRequests = requests.filter(req =>
-          !this.selectedRequests.some(sReq => sReq.requestId === req.requestId)
-        );
-        this.resetAvailableRequests(); // Display all initially available requests
+        this.allNewApprovedRequests = requests;
+        // After loading the master list, apply any existing search/selection filters
+        this.searchRequests();
         this.isLoading = false;
       },
       error: (err: any) => {
@@ -86,11 +85,6 @@ export class LdAddEvent implements OnInit, OnDestroy {
         this.isLoading = false;
       }
     });
-  }
-
-  resetAvailableRequests(): void {
-    this.availableRequests = [...this.allNewApprovedRequests];
-    this.searchError = null;
   }
 
   onSubmit(): void {
@@ -125,66 +119,62 @@ export class LdAddEvent implements OnInit, OnDestroy {
   }
 
   onSearchTermChange(term: string): void {
+    // Update the model to ensure it's in sync
+    this.requestSearchTerm = term;
+    // Push the new term to the Subject; the subscription will handle debouncing and filtering
     this.requestSearchTerms.next(term);
   }
 
+  // Filters the master list (`allNewApprovedRequests`) to populate `availableRequests`
   searchRequests(): void {
     const term = this.requestSearchTerm.trim();
+    this.searchError = null;
+
+    // Start with all requests from the master list that are not yet selected
+    let currentAvailableRequests = this.allNewApprovedRequests.filter(req =>
+      !this.selectedRequests.some(sReq => sReq.requestId === req.requestId)
+    );
+
+    // If the search term is empty, display all currentAvailableRequests
     if (term === '') {
-      this.resetAvailableRequests();
+      this.availableRequests = currentAvailableRequests;
       return;
     }
 
-    this.searchError = null;
+    // Otherwise, apply further filtering based on the search term
+    const lowerCaseTerm = term.toLowerCase();
+    let filteredRequests: addRequestToEvent[] = [];
+
     if (this.searchById) {
-      const requestId = Number.parseInt(term, 10);
-      if (Number.isNaN(requestId)) {
-        this.searchError = 'Please enter a valid request ID.';
-        this.availableRequests = [];
-      } else {
-        this.ldAddEventService.getRequestById(requestId).subscribe({
-          next: (request: addRequestToEvent) => {
-            // Only show if it's not already selected and is actually available
-            if (request && !this.selectedRequests.some(sReq => sReq.requestId === request.requestId)) {
-              this.availableRequests = [request];
-            } else {
-              this.availableRequests = [];
-              this.searchError = 'No unassigned request found with this ID.';
-            }
-          },
-          error: (err: any) => {
-            console.error('Error searching request by ID:', err);
-            this.searchError = 'Error searching for request by ID.';
-            this.availableRequests = [];
-          }
-        });
-      }
-    } else { // Search by name
-      this.ldAddEventService.getRequestByName(term).subscribe({
-        next: (requests: addRequestToEvent[]) => {
-          // Filter out selected requests from search results
-          this.availableRequests = requests.filter(req =>
-            !this.selectedRequests.some(sReq => sReq.requestId === req.requestId)
-          );
-          if (this.availableRequests.length === 0) {
-            this.searchError = 'No unassigned requests found matching the name.';
-          }
-        },
-        error: (err: any) => {
-          console.error('Error searching requests by name:', err);
-          this.searchError = 'Error searching for requests by name.';
-          this.availableRequests = [];
+      const requestId = parseInt(term, 10);
+      if (!isNaN(requestId)) {
+        filteredRequests = currentAvailableRequests.filter(req =>
+          req.requestId === requestId
+        );
+        if (filteredRequests.length === 0) {
+          this.searchError = 'No unassigned request found with this ID matching the search.';
         }
-      });
+      } else {
+        this.searchError = 'Please enter a valid number for Request ID.';
+      }
+    } else { // Search by name (e.g., requestor's name or justification)
+      filteredRequests = currentAvailableRequests.filter(req =>
+        (req.justification.toLowerCase().includes(lowerCaseTerm) ||
+         (req.user?.firstName && req.user.firstName.toLowerCase().includes(lowerCaseTerm)) ||
+         (req.user?.lastName && req.user.lastName.toLowerCase().includes(lowerCaseTerm)))
+      );
+      if (filteredRequests.length === 0) {
+        this.searchError = 'No unassigned requests found matching the name.';
+      }
     }
+    this.availableRequests = filteredRequests;
   }
 
   addRequestToSelection(request: addRequestToEvent): void {
     if (!this.selectedRequests.some(r => r.requestId === request.requestId)) {
       this.selectedRequests.push(request);
-      // Remove from the full list and the currently displayed list
-      this.allNewApprovedRequests = this.allNewApprovedRequests.filter(r => r.requestId !== request.requestId);
-      this.availableRequests = this.availableRequests.filter(r => r.requestId !== request.requestId);
+      // Re-filter available requests after adding, to remove the selected item
+      this.searchRequests();
     }
   }
 
@@ -193,30 +183,27 @@ export class LdAddEvent implements OnInit, OnDestroy {
     this.selectedRequests = this.selectedRequests.filter(req => req.requestId !== requestIdToRemove);
 
     if (removedRequest) {
-      // Add it back to the full list if it's not already there and if it meets the criteria
-      // (e.g., ensure it's approved and unassigned - though the service should handle this)
+      // Add the request back to the master list if it was originally there
       if (!this.allNewApprovedRequests.some(r => r.requestId === removedRequest.requestId)) {
         this.allNewApprovedRequests.push(removedRequest);
       }
-      // Re-apply search/filter to availableRequests if there's a search term, otherwise just add it back
-      if (this.requestSearchTerm.trim() === '') {
-        this.availableRequests.push(removedRequest);
-      } else {
-        // If there's a search term, re-evaluate if the removed request matches it
-        // For simplicity, we can re-run the search or just add it if it matches the current term
-        // A more robust solution might re-filter `allNewApprovedRequests` into `availableRequests`
-        this.onSearchTermChange(this.requestSearchTerm);
-      }
+      // Re-filter available requests after removing, to potentially show the item again
+      this.searchRequests();
     }
   }
 
+  clearSearch(): void {
+    this.requestSearchTerm = '';
+    this.searchError = null;
+    this.searchRequests(); // This will show all available requests
+  }
+
+  // Add this method to handle the back navigation
   navigateBackToEvents(): void {
     this.router.navigate(['/ld-events']);
   }
 
   ngOnDestroy(): void {
-    for (const sub of this.subscriptions) {
-      sub.unsubscribe();
-    }
+    this.subscriptions.forEach(sub => sub.unsubscribe());
   }
 }

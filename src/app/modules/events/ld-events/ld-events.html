@@ -101,7 +101,7 @@
           <td class="action-buttons-cell">
             <button class="action-btn view-btn" (click)="navigateToViewEvent(event.eventId)">View</button>
             <button class="action-btn edit-btn" (click)="navigateToEditEvent(event.eventId)">Edit</button>
-            <button class="action-btn delete-btn" (click)="deleteEvent(event.eventId)">Delete</button>
+            <button class="action-btn delete-btn" (click)="navigateToDeleteEvent(event.eventId)">Delete</button>
           </td>
         </tr>
         <tr *ngIf="events.length === 0">
