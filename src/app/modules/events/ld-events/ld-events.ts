@@ -123,18 +123,18 @@ export class LdEvents implements OnInit, OnDestroy {
     }
   }
 
-  deleteEvent(eventId: number | undefined): void {
-    if (!eventId) {
-      console.error('Event ID is required for deletion');
-      return;
-    }
-    
-    if (confirm('Are you sure you want to delete this event?')) {
-      // Implementation for delete functionality will be added when backend API is available
-      console.log('Delete event with ID:', eventId);
-      alert('Not Implemented');
-      // After successful deletion, refresh the events list
-      // this.fetchEvents();
-    }
+  // inside LdEvents component class (ld-events.ts)
+
+// src/app/modules/events/ld-events/ld-events.ts
+navigateToDeleteEvent(id: number | undefined): void {
+  if (id == null) {
+    console.warn('navigateToDeleteEvent called without an id');
+    return;
   }
+  // navigate to the route you actually defined
+  this.router.navigate(['/events/delete', id]);
+}
+
+
+
 }

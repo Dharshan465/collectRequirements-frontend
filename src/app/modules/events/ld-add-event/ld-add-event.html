@@ -118,18 +118,28 @@
           <div class="search-content">
         <div class="search-input-group">
           <label for="requestSearch">Search Request:</label>
-          <input
-            id="requestSearch"
-            type="text"
-            [(ngModel)]="requestSearchTerm"
-            (input)="onSearchTermChange($event.target.value)"
-            name="requestSearchTerm"
-            placeholder="Search by ID or Name"
-          >
+          <div class="input-with-clear">
+            <input
+              id="requestSearch"
+              type="text"
+              [(ngModel)]="requestSearchTerm"
+              (input)="onSearchTermChange(requestSearchTerm)"
+              name="requestSearchTerm"
+              placeholder="Search by ID or Name"
+            >
+            <button 
+              type="button" 
+              class="clear-search-button" 
+              *ngIf="requestSearchTerm"
+              (click)="clearSearch()"
+            >
+              ✕
+            </button>
+          </div>
           <div class="search-toggle">
-            <input type="radio" id="searchById" name="searchType" [(ngModel)]="searchById" [value]="true">
+            <input type="radio" id="searchById" name="searchType" [(ngModel)]="searchById" [value]="true" (change)="searchRequests()">
             <label for="searchById">ID</label>
-            <input type="radio" id="searchByName" name="searchType" [(ngModel)]="searchById" [value]="false">
+            <input type="radio" id="searchByName" name="searchType" [(ngModel)]="searchById" [value]="false" (change)="searchRequests()">
             <label for="searchByName">Name</label>
           </div>
         </div>
