@@ -67,9 +67,9 @@ export class LdEditEventComponent implements OnInit {
         
         this.requests = requestsData.map((req: any) => ({
           requestId: req.requestId || req.id || 0,
-          requestorId: req.requestorId || 0,
-          departmentId: req.department.departmentId || 0,
-          departmentName: req.departmentName || '',
+          requestorId: req.user?.userId || req.requestorId || 0,
+          departmentId: req.department?.departmentId || req.departmentId || 0,
+          departmentName: req.department?.departmentName || req.departmentName || '',
           eventId: req.eventId || 0,
           requestDate: req.requestDate || '',
           requestStatus: req.requestStatus || '',
@@ -116,7 +116,8 @@ export class LdEditEventComponent implements OnInit {
 
     console.log('Opening add request dialog for event:', this.event.eventId);
     const dialogRef = this.dialog.open(LdAddRequestDialogComponent, {
-      width: '1000px',
+      width: '90%',
+      maxWidth: '1400px',
       data: { eventId: this.event.eventId }
     });
 

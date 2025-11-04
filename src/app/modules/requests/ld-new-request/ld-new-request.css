@@ -1,39 +1,54 @@
-.new-requirement-container {
-  font-family: Arial, sans-serif;
-  padding: 20px;
-  max-width: 1000px;
+.add-event-container {
+  max-width: 1200px;
   margin: 0 auto;
-  background-color: #fff;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  background-color: #f8f9fa;
+  min-height: calc(100vh - 40px);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-.form-header {
+.header-section {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
-  border-bottom: 1px solid #eee;
-  padding-bottom: 10px;
+  background-color: white;
+  padding: 20px 30px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 25px;
+  border-left: 4px solid #040c5c;
 }
 
-.form-header h1 {
+.header-section h1 {
+  color: #040c5c;
   margin: 0;
-  color: #333;
+  font-size: 28px;
+  font-weight: 600;
 }
 
-.back-button {
-  padding: 8px 15px;
-  background-color: #6c757d;
+.back-to-events-button {
+  background-color: #040c5c;
   color: white;
   border: none;
-  border-radius: 5px;
+  padding: 12px 20px;
+  border-radius: 6px;
   cursor: pointer;
-  font-size: 0.9em;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.back-to-events-button:hover {
+  background-color: #030a4a;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(4, 12, 92, 0.3);
 }
 
 .back-button:hover {
-  background-color: #5a6268;
+  background-color: #030a4a;
 }
 
 .form-group {

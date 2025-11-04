@@ -1,59 +1,78 @@
-<div class="page-root">
-    <header class="topbar">
-        <div class="brand">Collect Requirements</div>
-        <div class="user">User</div>
-    </header>
+<div class="add-event-container">
+    <div class="header-section">
+        <h1>Event Details</h1>
+        <button class="back-button" (click)="navigateBackToEvents()">← Back to Events</button>
+    </div>
 
-    <main class="content">
-        <div *ngIf="loading" class="loading">Loading event details...</div>
-        <div *ngIf="error" class="error">{{ error }}</div>
+    <main class="main-content">
+        <div *ngIf="loading" class="loading-state">
+            <div class="loading-spinner"></div>
+            <p>Loading event details...</p>
+        </div>
+        
+        <div *ngIf="error" class="error-state">
+            <div class="error-icon">⚠️</div>
+            <h3>Error Loading Event</h3>
+            <p>{{ error }}</p>
+            <button class="retry-button" (click)="ngOnInit()">Try Again</button>
+        </div>
 
-        <section class="card" *ngIf="event && !loading">
-            <h2 class="card-title">Event details</h2>
-            <div class="event-grid">
-                <div class="grid-row">
-                    <div class="label-pill">Event ID</div>
-                    <div class="value-box">{{ event.eventId }}</div>
+        <section class="info-card" *ngIf="event && !loading">
+            <h2>Event Information</h2>
+            <div class="info-grid">
+                <div class="info-item">
+                    <span class="info-label">Event ID</span>
+                    <div class="value">{{ event.eventId }}</div>
                 </div>
 
-                <div class="grid-row">
-                    <div class="label-pill">Event Name</div>
-                    <div class="value-box">{{ event.eventName }}</div>
+                <div class="info-item">
+                    <span class="info-label">Event Name</span>
+                    <div class="value">{{ event.eventName }}</div>
                 </div>
 
-                <div class="grid-row">
-                    <div class="label-pill">Description</div>
-                    <div class="value-box description">{{ event.description || '-' }}</div>
+                <div class="info-item full-width">
+                    <span class="info-label">Description</span>
+                    <div class="text-content">{{ event.description || 'No description available' }}</div>
                 </div>
 
-                <div class="grid-row">
-                    <div class="label-pill">Participants</div>
-                    <div class="value-box">{{ event.participantsCount || '-' }}</div>
+                <div class="info-item">
+                    <span class="info-label">Participants</span>
+                    <div class="value participant-count">{{ event.participantsCount || 'Unknown' }}</div>
                 </div>
 
-                <div class="grid-row">
-                    <div class="label-pill">Duration</div>
-                    <div class="value-box">{{ event.duration || '-' }}</div>
+                <div class="info-item">
+                    <span class="info-label">Duration</span>
+                    <div class="value">{{ event.duration || 'Not specified' }}</div>
                 </div>
 
-                <div class="grid-row">
-                    <div class="label-pill">Event Type</div>
-                    <div class="value-box">{{ event.eventType || '-' }}</div>
+                <div class="info-item">
+                    <span class="info-label">Event Type</span>
+                    <div class="value">{{ event.eventType || 'Not specified' }}</div>
                 </div>
 
-                <div class="grid-row">
-                    <div class="label-pill">Funding Source</div>
-                    <div class="value-box">{{ event.fundingSource || '-' }}</div>
+                <div class="info-item">
+                    <span class="info-label">Funding Source</span>
+                    <div class="value">{{ event.fundingSource || 'Not specified' }}</div>
                 </div>
             </div>
         </section>
 
-        <section class="card requests" *ngIf="!loading">
-            <h3 class="card-title">Related Requests</h3>
+        <section class="requests-card" *ngIf="!loading">
+            <h2>Related Requests</h2>
+            
+            <div *ngIf="requests.length === 0" class="no-requests">
+                <div class="empty-state">
+                    <div class="empty-icon">📋</div>
+                    <h3>No Requests Found</h3>
+                    <p>No training requests are associated with this event.</p>
+                </div>
+            </div>
 
-            <div *ngIf="requests.length === 0" class="empty">No requests found for this event.</div>
+            <div class="requests-summary" *ngIf="requests.length > 0">
+                <span class="summary-text">Displaying {{ requests.length }} request(s) for this event</span>
+            </div>
 
-            <div class="table-wrap" *ngIf="requests.length > 0">
+            <div class="requests-table-container" *ngIf="requests.length > 0">
                 <table class="requests-table">
                     <thead>
                         <tr>
@@ -70,15 +89,15 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let r of requests">
-                            <td>{{r.requestId }}</td>
+                        <tr *ngFor="let r of requests; let i = index" [class.odd-row]="i % 2 === 1">
+                            <td class="request-id-cell">{{r.requestId }}</td>
                             <td>{{r.requestorId || '-' }}</td>
                             <td>{{ r.departmentName || r.departmentId || '-' }}</td>
                             <td>{{ r.requestDate | date:'medium' }}</td>
-                            <td>{{ r.requestStatus }}</td>
+                            <td class="status-cell">{{ r.requestStatus }}</td>
                             <td>{{ r.groupRequest ? 'Yes' : 'No' }}</td>
-                            <td class="nowrap">{{ r.justification }}</td>
-                            <td class="center">{{ r.noOfAssociates || '-' }}</td>
+                            <td>{{ r.justification }}</td>
+                            <td>{{ r.noOfAssociates || '-' }}</td>
                             <td>{{ r.tanNumber || '-' }}</td>
                             <td>{{ r.curriculumLink || '-' }}</td>
                         </tr>
@@ -87,11 +106,8 @@
             </div>
         </section>
 
-        <div class="button-container">
-            <button class="back-to-events-button" (click)="navigateBackToEvents()">Back to Events</button>
-            <button class="edit-event-button" (click)="navigateToEditEvent()">Edit Event</button>
+        <div class="button-container" *ngIf="event && !loading">
+            <button class="edit-button" (click)="navigateToEditEvent()">Edit Event</button>
         </div>
     </main>
-
-    <footer class="page-footer">Footer</footer>
 </div>

@@ -1,8 +1,8 @@
 <!-- src/app/modules/events/ld-events/ld-events.html -->
 
-<div class="events-dashboard-container">
+<div class="dashboard-container">
   <div class="dashboard-header">
-    <h2>Events Dashboard</h2>
+    <h1>Events Dashboard</h1>
     <div class="header-buttons">
       <button class="back-button" (click)="navigateBackToDashboard()">Back to Dashboard</button>
       <button class="add-event-button" (click)="navigateToAddEvent()">Add Event</button>
@@ -10,7 +10,7 @@
   </div>
 
   <!-- Filter Section -->
-  <div class="filter-section">
+  <div class="request-filters">
     <div class="filter-group">
       <label for="searchTerm">Search by ID or Name:</label>
       <input
@@ -73,38 +73,41 @@
     No events found.
   </div>
 
-  <table *ngIf="!isLoading && !errorMessage && events.length > 0" class="events-table">
-    <thead>
-      <tr>
-        <th>Event ID</th>
-        <th>Event Name</th>
-        <th>Description</th>
-        <th>Participants</th>
-        <th>Duration</th>
-        <th>Event Type</th>
-        <th>Funding Source</th>
-        <th>Status</th>
-        <th>Actions</th> <!-- NEW: Actions column header -->
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let event of events">
-        <td>{{ event.eventId }}</td>
-        <td>{{ event.eventName }}</td>
-        <td>{{ event.description }}</td>
-        <td>{{ event.participantsCount }}</td>
-        <td>{{ event.duration }}</td>
-        <td>{{ event.eventType }}</td>
-        <td>{{ event.fundingSource }}</td>
-        <td>{{ event.status }}</td>
-        <td>
-          <div class="action-buttons-group"> <!-- Group for action buttons -->
-            <button class="action-button view" (click)="navigateToViewEvent(event.eventId)">View</button>
-            <button class="action-button edit" (click)="navigateToEditEvent(event.eventId)">Edit</button>
-            <button class="action-button delete" (click)="deleteEvent(event.eventId)">Delete</button>
-          </div>
-        </td> <!-- Actions column with buttons -->
-      </tr>
-    </tbody>
-  </table>
+  <section class="requests-table">
+    <table *ngIf="!isLoading && !errorMessage && events.length > 0">
+      <thead>
+        <tr>
+          <th>Event ID</th>
+          <th>Event Name</th>
+          <th>Description</th>
+          <th>Participants</th>
+          <th>Duration</th>
+          <th>Event Type</th>
+          <th>Funding Source</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let event of events">
+          <td>{{ event.eventId }}</td>
+          <td>{{ event.eventName }}</td>
+          <td>{{ event.description }}</td>
+          <td>{{ event.participantsCount }}</td>
+          <td>{{ event.duration }}</td>
+          <td>{{ event.eventType }}</td>
+          <td>{{ event.fundingSource }}</td>
+          <td>{{ event.status }}</td>
+          <td class="action-buttons-cell">
+            <button class="action-btn view-btn" (click)="navigateToViewEvent(event.eventId)">View</button>
+            <button class="action-btn edit-btn" (click)="navigateToEditEvent(event.eventId)">Edit</button>
+            <button class="action-btn delete-btn" (click)="deleteEvent(event.eventId)">Delete</button>
+          </td>
+        </tr>
+        <tr *ngIf="events.length === 0">
+          <td colspan="9" class="no-data">No events found.</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
 </div>

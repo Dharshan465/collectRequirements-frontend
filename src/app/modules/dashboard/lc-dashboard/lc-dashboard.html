@@ -73,7 +73,7 @@
 </section>
 
 
-  <span id="request-counts">Total Requests: {{ requestDetails.length }}</span>
+  <span id="request-counts">Total Requests: {{ filteredRequestDetails.length }}</span>
   <section class="requests-table">
     <table>
       <thead>
@@ -90,7 +90,7 @@
       </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let request of requestDetails">
+        <tr *ngFor="let request of filteredRequestDetails">
         <td>{{ request.requestId }}</td>
         <td>{{ request.departmentName }}</td>
         <td>{{ request.eventName || 'Not Assigned' }}</td>
@@ -101,7 +101,7 @@
         <td>{{ request.tanNumber }}</td>
         <td>{{ request.curriculumLink }}</td>
       </tr>
-        <tr *ngIf="requestDetails.length === 0">
+        <tr *ngIf="filteredRequestDetails.length === 0">
             <td colspan="11" class="no-data">No requests found.</td>
         </tr>
       </tbody>

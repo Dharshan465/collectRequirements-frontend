@@ -1,10 +1,13 @@
-<div class="new-requirement-container">
-  <header class="form-header">
+<div class="add-event-container">
+  <div class="header-section">
     <h1>New Requirement</h1>
-    <button class="back-button" (click)="navigateBack()">Back to Dashboard</button>
-  </header>
+    <button class="back-button" (click)="navigateBack()">← Back to Dashboard</button>
+  </div>
 
-<form (ngSubmit)="onSubmit()" #requestForm="ngForm">
+  <div class="form-section">
+    <h2>Request Details</h2>
+    <div class="form-content">
+      <form (ngSubmit)="onSubmit()" #requestForm="ngForm">
     <div class="form-group">
       <label for="requestorId">Requestor ID:</label>
       <input type="text" id="requestorId" [ngModel]="this.lcUserId" name="requestorId" readonly>
@@ -70,15 +73,18 @@
       </div>
     </div>
 
-    <button type="submit" class="submit-button" [disabled]="!requestForm.form.valid">Submit Request</button>
-  </form>
+        <div class="button-container">
+          <button type="submit" class="submit-button" [disabled]="!requestForm.form.valid">Submit Request</button>
+        </div>
+      </form>
+    </div>
+  </div>
 
-    <!-- User Selection Modal -->
+  <!-- User Selection Modal -->
   <app-user-selection
     *ngIf="showUserSelectionPopup"
     [initialSelectedUsers]="selectedParticipantsDisplay"
     (selectionConfirmed)="onModalSelectionConfirmed($event)"
     (closeModal)="onModalClose()">
   </app-user-selection>
-
-  </div>
+</div>

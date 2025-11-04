@@ -132,7 +132,7 @@ export class LdEvents implements OnInit, OnDestroy {
     if (confirm('Are you sure you want to delete this event?')) {
       // Implementation for delete functionality will be added when backend API is available
       console.log('Delete event with ID:', eventId);
-      alert('Delete functionality will be implemented when backend API is available');
+      alert('Not Implemented');
       // After successful deletion, refresh the events list
       // this.fetchEvents();
     }
