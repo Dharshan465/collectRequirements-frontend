@@ -11,6 +11,7 @@ export interface Event {
   duration: string;
   eventType: string;
   fundingSource: string;
+  status: string;
 }
 
 export interface Request {
@@ -72,7 +73,8 @@ export class LdViewEventComponent implements OnInit {
           participantsCount: eventData.participantsCount || 0,
           duration: eventData.duration || '',
           eventType: eventData.eventType || '',
-          fundingSource: eventData.fundingSource || ''
+          fundingSource: eventData.fundingSource || '',
+          status: eventData.status || ''
         };
         
         this.fetchEventRequests(eventId);

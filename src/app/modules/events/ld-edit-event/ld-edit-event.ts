@@ -19,7 +19,15 @@ export class LdEditEventComponent implements OnInit {
   requests: Request[] = [];
   loading = false;
   error: string | null = null;
+  saving = false;
   removingRequests: Set<number> = new Set();
+
+  statusOptions = [
+    { value: 'READY', label: 'Ready' },
+    { value: 'IN_PROGRESS', label: 'In Progress' },
+    { value: 'CANCELLED', label: 'Cancelled' },
+    { value: 'COMPLETED', label: 'Completed' }
+  ];
 
   constructor(
     private readonly route: ActivatedRoute,
@@ -94,18 +102,19 @@ export class LdEditEventComponent implements OnInit {
 
   saveEvent(): void {
     if (this.event) {
-      this.loading = true;
+      this.saving = true;
       this.error = null;
       
       this.viewEventService.updateEvent(this.event.eventId, this.event).subscribe({
         next: () => {
           console.log('Event updated successfully');
-          this.loading = false;
+          // Redirect to ld-events page after successful save
+          this.router.navigate(['/ld-events']);
         },
         error: (error: any) => {
           console.error('Error updating event:', error);
           this.error = 'Failed to update event. Please try again later.';
-          this.loading = false;
+          this.saving = false;
         }
       });
     }
@@ -116,8 +125,9 @@ export class LdEditEventComponent implements OnInit {
 
     console.log('Opening add request dialog for event:', this.event.eventId);
     const dialogRef = this.dialog.open(LdAddRequestDialogComponent, {
-      width: '90%',
-      maxWidth: '1400px',
+      width: '95%',
+      maxWidth: '1600px',
+      maxHeight: '90vh',
       data: { eventId: this.event.eventId }
     });
 

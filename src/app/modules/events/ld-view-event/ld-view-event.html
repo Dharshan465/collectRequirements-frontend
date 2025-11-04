@@ -54,6 +54,13 @@
                     <span class="info-label">Funding Source</span>
                     <div class="value">{{ event.fundingSource || 'Not specified' }}</div>
                 </div>
+
+                <div class="info-item">
+                    <span class="info-label">Status</span>
+                    <div class="value status-badge" [ngClass]="'status-' + (event.status || 'unknown').toLowerCase()">
+                        {{ event.status || 'Not specified' }}
+                    </div>
+                </div>
             </div>
         </section>
 

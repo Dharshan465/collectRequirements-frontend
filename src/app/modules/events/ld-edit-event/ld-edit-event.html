@@ -47,12 +47,15 @@
           <label for="fundingSource">Funding Source:</label>
           <input type="text" id="fundingSource" [(ngModel)]="event.fundingSource" />
         </div>
-      </div>
-    </div>
 
-    <div class="form-actions">
-      <button class="cancel-button" (click)="navigateBackToEvents()">Cancel</button>
-      <button class="submit-button" (click)="saveEvent()">Save Changes</button>
+        <div class="form-group">
+          <label for="eventStatus">Event Status:</label>
+          <select id="eventStatus" [(ngModel)]="event.status">
+            <option value="">Select Status</option>
+            <option *ngFor="let status of statusOptions" [value]="status.value">{{ status.label }}</option>
+          </select>
+        </div>
+      </div>
     </div>
   </div>
   
@@ -107,5 +110,13 @@
                 <button class="add-request-button" (click)="addRequest()">Add Request</button>
             </div>
         </div>
+    </div>
+
+    <!-- Form Actions moved to bottom -->
+    <div class="form-actions" *ngIf="event && !loading && !error">
+      <button class="cancel-button" (click)="navigateBackToEvents()" [disabled]="saving">Cancel</button>
+      <button class="submit-button" (click)="saveEvent()" [disabled]="saving">
+        {{ saving ? 'Saving...' : 'Save Changes' }}
+      </button>
     </div>
 </div>
