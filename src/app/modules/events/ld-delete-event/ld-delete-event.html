@@ -1,1 +1,91 @@
-<p>ld-delete-event works!</p>
+<!-- src/app/modules/events/ld-delete-event/ld-delete-event.html -->
+
+<div class="delete-event-container" *ngIf="!isLoading; else loadingTpl">
+  <div class="header-row">
+    <h2>Delete Event</h2>
+    <button class="back-button" (click)="goBack()">Back to Events</button>
+  </div>
+
+  <div *ngIf="errorMessage" class="error-message-block">{{ errorMessage }}</div>
+
+  <section class="event-details" *ngIf="event">
+    <h3>Event Details</h3>
+    <div class="details-grid">
+      <label>Event ID:</label><div>{{ event.eventId }}</div>
+      <label>Event Name:</label><div>{{ event.eventName }}</div>
+      <label>Description:</label><div>{{ event.description }}</div>
+      <label>Participants:</label><div>{{ event.participantsCount }}</div>
+      <label>Duration:</label><div>{{ event.duration }}</div>
+      <label>Event Type:</label><div>{{ event.eventType }}</div>
+      <label>Funding Source:</label><div>{{ event.fundingSource }}</div>
+      <label>Status:</label><div>{{ event.status }}</div>
+    </div>
+  </section>
+
+  <section class="requests-section">
+    <h3>Requests for this Event</h3>
+    <div *ngIf="requests && requests.length === 0" class="no-requests-message">
+      No requests mapped to this event.
+    </div>
+
+    <div class="requests-table-wrapper" *ngIf="requests && requests.length > 0">
+      <table class="requests-table">
+        <thead>
+          <tr>
+            <th>request_id</th>
+            <th>requestor_id</th>
+            <th>department_id</th>
+            <th>event_id</th>
+            <th>request_date</th>
+            <th>request_status</th>
+            <th>group_request</th>
+            <th>justification</th>
+            <th>TAN_number</th>
+            <th>Curriculum</th>
+            <th>no_of_participants</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let r of requests">
+            <td>{{ r.requestId }}</td>
+            <td>{{ r.requestorId }}</td>
+            <td>{{ r.departmentId }}</td>
+            <td>{{ r.eventId || 'N/A' }}</td>
+            <td>{{ r.requestDate }}</td>
+            <td>{{ r.requestStatus }}</td>
+            <td>{{ r.groupRequest ? 'Yes' : 'No' }}</td>
+            <td>{{ r.justification }}</td>
+            <td>{{ r.tanNumber }}</td>
+            <td>{{ r.curriculumLink }}</td>
+            <td>{{ r.noOfParticipants }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <div class="actions-row">
+    <button class="danger-button" (click)="onRequestDelete()" [disabled]="deleting">
+      <span *ngIf="!deleting">Delete Event</span>
+      <span *ngIf="deleting">Deleting...</span>
+    </button>
+    <button class="cancel-button" (click)="goBack()" [disabled]="deleting">Cancel</button>
+  </div>
+
+  <!-- Confirmation overlay -->
+  <div class="confirm-overlay" *ngIf="showConfirm">
+    <div class="confirm-modal">
+      <h4>Confirm Delete</h4>
+      <p>Are you sure you want to permanently delete event <strong>#{{ event?.eventId }}</strong> — "{{ event?.eventName }}"?</p>
+      <div class="confirm-actions">
+        <button class="confirm-yes" (click)="confirmDelete()" [disabled]="deleting">Yes, Delete</button>
+        <button class="confirm-no" (click)="cancelDelete()" [disabled]="deleting">Cancel</button>
+      </div>
+      <div *ngIf="deleteError" class="error-message-inline">{{ deleteError }}</div>
+    </div>
+  </div>
+</div>
+
+<ng-template #loadingTpl>
+  <div class="loading-message">Loading event details...</div>
+</ng-template>

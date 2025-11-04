@@ -7,6 +7,7 @@ import { LdViewEventComponent } from './modules/events/ld-view-event/ld-view-eve
 import { LdEditEventComponent } from './modules/events/ld-edit-event/ld-edit-event';
 import { LdEvents } from './modules/events/ld-events/ld-events';
 import { LdAddEvent } from './modules/events/ld-add-event/ld-add-event';
+import { LdDeleteEvent } from './modules/events/ld-delete-event/ld-delete-event';
 
 export const routes: Routes = [
     { path :'dashboard/lc/:id',component:LcDashboard},
@@ -17,7 +18,6 @@ export const routes: Routes = [
     {path:'ld-add-event', component: LdAddEvent},
     { path: 'events/view/:id', component: LdViewEventComponent },
     { path: 'events/edit/:id', component: LdEditEventComponent },
-    {path:'ld-events',component: LdEvents},
-    {path:'ld-add-event', component: LdAddEvent},
+    { path: 'events/delete/:id', component: LdDeleteEvent },
     { path: '', redirectTo: 'dashboard/lc/16', pathMatch: 'full' }
 ];

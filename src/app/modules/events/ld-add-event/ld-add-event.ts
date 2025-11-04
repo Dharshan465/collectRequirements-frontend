@@ -33,7 +33,10 @@ export class LdAddEvent implements OnInit, OnDestroy {
   };
 
   selectedRequests: addRequestToEvent[] = [];
-  availableRequests: addRequestToEvent[] = [];
+  // Store all requests that are initially available (approved, not assigned)
+  private allNewApprovedRequests: addRequestToEvent[] = [];
+  availableRequests: addRequestToEvent[] = []; // This will be the displayed list
+
   requestSearchTerm: string = '';
   searchById: boolean = true;
 
@@ -50,18 +53,47 @@ export class LdAddEvent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
+    // Fetch all new approved requests on component initialization
+    this.loadAllNewApprovedRequests();
+
     this.subscriptions.push(
       this.requestSearchTerms.pipe(
         debounceTime(300),
         distinctUntilChanged()
       ).subscribe(term => {
-        if (term.trim() !== '') {
-          this.searchRequests();
+        // If search term is empty, reset to the full list of available requests
+        if (term.trim() === '') {
+          this.resetAvailableRequests();
         } else {
-          this.availableRequests = [];
+          // Otherwise, perform the search
+          this.searchRequests();
         }
       })
     );
+  }
+
+  loadAllNewApprovedRequests(): void {
+    this.isLoading = true;
+    this.ldAddEventService.getAllNewApprovedRequestsNotAssignedToEvent().subscribe({
+      next: (requests: addRequestToEvent[]) => {
+        // Filter out any requests that are already in selectedRequests
+        this.allNewApprovedRequests = requests.filter(req =>
+          !this.selectedRequests.some(sReq => sReq.requestId === req.requestId)
+        );
+        this.resetAvailableRequests(); // Display all initially available requests
+        this.isLoading = false;
+      },
+      error: (err: any) => {
+        console.error('Error loading initial requests:', err);
+        this.searchError = 'Failed to load available requests.';
+        this.isLoading = false;
+      }
+    });
+  }
+
+  resetAvailableRequests(): void {
+    this.availableRequests = [...this.allNewApprovedRequests];
+    this.searchError = null;
   }
 
   onSubmit(): void {
@@ -74,12 +106,11 @@ export class LdAddEvent implements OnInit, OnDestroy {
       return;
     }
 
-    // Map selected requests to an array of their IDs
-    const selectedRequestIds = this.selectedRequests.map(req => req.requestId); // Still use requestId from addRequestToEvent model
+    const selectedRequestIds = this.selectedRequests.map(req => req.requestId);
 
     const eventCreationPayload: EventCreationRequestDTO = {
       newEvent: this.newEvent,
-      requests: selectedRequestIds // <--- CHANGED THIS TO 'requests'
+      requests: selectedRequestIds
     };
 
     this.ldAddEventService.createEvent(eventCreationPayload).subscribe({
@@ -103,8 +134,7 @@ export class LdAddEvent implements OnInit, OnDestroy {
   searchRequests(): void {
     const term = this.requestSearchTerm.trim();
     if (term === '') {
-      this.availableRequests = [];
-      this.searchError = null;
+      this.resetAvailableRequests();
       return;
     }
 
@@ -114,9 +144,12 @@ export class LdAddEvent implements OnInit, OnDestroy {
       if (!isNaN(requestId)) {
         this.ldAddEventService.getRequestById(requestId).subscribe({
           next: (request: addRequestToEvent) => {
-            this.availableRequests = request ? [request] : [];
-            if (!request) {
-              this.searchError = 'No request found with this ID.';
+            // Only show if it's not already selected and is actually available
+            if (request && !this.selectedRequests.some(sReq => sReq.requestId === request.requestId)) {
+              this.availableRequests = [request];
+            } else {
+              this.availableRequests = [];
+              this.searchError = 'No unassigned request found with this ID.';
             }
           },
           error: (err: any) => {
@@ -129,12 +162,15 @@ export class LdAddEvent implements OnInit, OnDestroy {
         this.searchError = 'Please enter a valid number for Request ID.';
         this.availableRequests = [];
       }
-    } else {
+    } else { // Search by name
       this.ldAddEventService.getRequestByName(term).subscribe({
         next: (requests: addRequestToEvent[]) => {
-          this.availableRequests = requests;
-          if (requests.length === 0) {
-            this.searchError = 'No requests found matching the name.';
+          // Filter out selected requests from search results
+          this.availableRequests = requests.filter(req =>
+            !this.selectedRequests.some(sReq => sReq.requestId === req.requestId)
+          );
+          if (this.availableRequests.length === 0) {
+            this.searchError = 'No unassigned requests found matching the name.';
           }
         },
         error: (err: any) => {
@@ -149,12 +185,32 @@ export class LdAddEvent implements OnInit, OnDestroy {
   addRequestToSelection(request: addRequestToEvent): void {
     if (!this.selectedRequests.some(r => r.requestId === request.requestId)) {
       this.selectedRequests.push(request);
+      // Remove from the full list and the currently displayed list
+      this.allNewApprovedRequests = this.allNewApprovedRequests.filter(r => r.requestId !== request.requestId);
       this.availableRequests = this.availableRequests.filter(r => r.requestId !== request.requestId);
     }
   }
 
   removeRequestFromSelection(requestIdToRemove: number): void {
+    const removedRequest = this.selectedRequests.find(req => req.requestId === requestIdToRemove);
     this.selectedRequests = this.selectedRequests.filter(req => req.requestId !== requestIdToRemove);
+
+    if (removedRequest) {
+      // Add it back to the full list if it's not already there and if it meets the criteria
+      // (e.g., ensure it's approved and unassigned - though the service should handle this)
+      if (!this.allNewApprovedRequests.some(r => r.requestId === removedRequest.requestId)) {
+        this.allNewApprovedRequests.push(removedRequest);
+      }
+      // Re-apply search/filter to availableRequests if there's a search term, otherwise just add it back
+      if (this.requestSearchTerm.trim() === '') {
+        this.availableRequests.push(removedRequest);
+      } else {
+        // If there's a search term, re-evaluate if the removed request matches it
+        // For simplicity, we can re-run the search or just add it if it matches the current term
+        // A more robust solution might re-filter `allNewApprovedRequests` into `availableRequests`
+        this.onSearchTermChange(this.requestSearchTerm);
+      }
+    }
   }
 
   ngOnDestroy(): void {

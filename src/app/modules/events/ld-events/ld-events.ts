@@ -102,4 +102,20 @@ export class LdEvents implements OnInit, OnDestroy {
   navigateToAddEvent(): void {
     this.router.navigate(['/ld-add-event']);
   }
+
+  // inside LdEvents component class (ld-events.ts)
+
+  // src/app/modules/events/ld-events/ld-events.ts
+    navigateToDeleteEvent(id: number | undefined): void {
+      if (id == null) {
+        console.warn('navigateToDeleteEvent called without an id');
+        return;
+      }
+      // navigate to the route you actually defined
+      this.router.navigate(['/events/delete', id]);
+    }
+
+
+
+
 }
