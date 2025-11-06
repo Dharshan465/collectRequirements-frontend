@@ -278,4 +278,11 @@
   background-color: #c82333;
 }
 
+.required {
+  color: #dc3545;
+  margin-left: 2px;
+  font-weight: bold;
+}
+
+
 

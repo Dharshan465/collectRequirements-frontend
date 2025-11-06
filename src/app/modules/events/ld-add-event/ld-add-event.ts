@@ -91,6 +91,18 @@ export class LdAddEvent implements OnInit, OnDestroy {
     this.isLoading = true;
     this.submitError = null;
 
+    // Validate required fields first
+    if (!this.newEvent.eventName?.trim() ||
+        !this.newEvent.description?.trim() ||
+        !this.newEvent.duration ||
+        !this.newEvent.eventType?.trim() ||
+        !this.newEvent.fundingSource?.trim() ||
+        !this.newEvent.status) {
+      this.submitError = 'Please fill in all required fields: Event Name, Description, Duration, Event Type, Funding Source, and Status.';
+      this.isLoading = false;
+      return;
+    }
+
     if (this.selectedRequests.length === 0) {
       this.submitError = 'Please select at least one request for the event.';
       this.isLoading = false;

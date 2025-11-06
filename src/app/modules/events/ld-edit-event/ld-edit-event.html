@@ -19,13 +19,13 @@
       <h2>Event Details</h2>
       <div class="form-content">
         <div class="form-group">
-          <label for="eventName">Event Name:</label>
-          <input type="text" id="eventName" [(ngModel)]="event.eventName" />
+          <label for="eventName">Event Name: <span class="required">*</span></label>
+          <input type="text" id="eventName" [(ngModel)]="event.eventName" required />
         </div>
 
         <div class="form-group">
-          <label for="eventDescription">Description:</label>
-          <textarea id="eventDescription" [(ngModel)]="event.description"></textarea>
+          <label for="eventDescription">Description: <span class="required">*</span></label>
+          <textarea id="eventDescription" [(ngModel)]="event.description" required></textarea>
         </div>
 
         <div class="form-group">
@@ -34,23 +34,23 @@
         </div>
 
         <div class="form-group">
-          <label for="duration">Duration:</label>
-          <input type="text" id="duration" [(ngModel)]="event.duration" />
+          <label for="duration">Duration: <span class="required">*</span></label>
+          <input type="text" id="duration" [(ngModel)]="event.duration" required />
         </div>
 
         <div class="form-group">
-          <label for="eventType">Event Type:</label>
-          <input type="text" id="eventType" [(ngModel)]="event.eventType" />
+          <label for="eventType">Event Type: <span class="required">*</span></label>
+          <input type="text" id="eventType" [(ngModel)]="event.eventType" required />
         </div>
 
         <div class="form-group">
-          <label for="fundingSource">Funding Source:</label>
-          <input type="text" id="fundingSource" [(ngModel)]="event.fundingSource" />
+          <label for="fundingSource">Funding Source: <span class="required">*</span></label>
+          <input type="text" id="fundingSource" [(ngModel)]="event.fundingSource" required />
         </div>
 
         <div class="form-group">
-          <label for="eventStatus">Event Status:</label>
-          <select id="eventStatus" [(ngModel)]="event.status">
+          <label for="eventStatus">Event Status: <span class="required">*</span></label>
+          <select id="eventStatus" [(ngModel)]="event.status" required>
             <option value="">Select Status</option>
             <option *ngFor="let status of statusOptions" [value]="status.value">{{ status.label }}</option>
           </select>
@@ -92,7 +92,15 @@
                             <td>{{ r.justification }}</td>
                             <td>{{ r.noOfAssociates }}</td>
                             <td>{{ r.tanNumber }}</td>
-                            <td>{{ r.curriculumLink || '-' }}</td>
+                            <td>
+                              <a *ngIf="r.curriculumLink" 
+                                 [href]="r.curriculumLink" 
+                                 target="_blank" 
+                                 class="curriculum-link">
+                                View Curriculum
+                              </a>
+                              <span *ngIf="!r.curriculumLink">-</span>
+                            </td>
                             <td>
                                 <button 
                                     class="remove-button" 

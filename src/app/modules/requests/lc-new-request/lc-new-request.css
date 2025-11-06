@@ -93,6 +93,12 @@
   border: 1px solid #ddd;
   border-radius: 6px;
   font-size: 14px;
+}
+
+/* Required field indicator */
+.required {
+  color: #dc3545;
+  margin-left: 3px;
   transition: border-color 0.3s ease;
   box-sizing: border-box;
 }

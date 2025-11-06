@@ -16,5 +16,5 @@ export interface RequestDetails {
   tanNumber: string;
   curriculumLink: string;
   participants: UserParticipantDetails[];
-
+  approvalNotes?: string;
 }

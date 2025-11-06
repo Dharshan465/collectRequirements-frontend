@@ -1,6 +1,26 @@
 /* You can add global styles to this file, and also import other style files */
 /* styles.css (or similar global stylesheet) */
 
+/* Clickable Curriculum Link Styling */
+.curriculum-link {
+  color: #1976d2;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.curriculum-link:hover {
+  text-decoration: underline;
+  color: #1565c0;
+}
+
+.curriculum-link:active {
+  color: #0d47a1;
+}
+
 html {
   height: 100%;
   margin: 0;

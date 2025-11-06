@@ -65,7 +65,15 @@ import { MatButtonModule } from '@angular/material/button';
             <tr *ngFor="let request of filteredRequests">
               <td>{{ request.requestId }}</td>
               <td>{{ request.tanNumber || 'N/A' }}</td>
-              <td>{{ request.curriculumLink || 'N/A' }}</td>
+              <td>
+                <a *ngIf="request.curriculumLink" 
+                   [href]="request.curriculumLink" 
+                   target="_blank" 
+                   class="curriculum-link">
+                  View Curriculum
+                </a>
+                <span *ngIf="!request.curriculumLink">N/A</span>
+              </td>
               <td>{{ request.groupRequest ? 'Yes' : 'No' }}</td>
               <td class="justification-cell" [title]="request.justification || 'N/A'">{{ request.justification || 'N/A' }}</td>
               <td>{{ request.noOfAssociates }}</td>

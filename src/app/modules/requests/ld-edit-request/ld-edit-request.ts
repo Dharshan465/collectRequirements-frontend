@@ -99,7 +99,8 @@ export class LdEditRequest implements OnInit {
           ...request,
           eventName: request.eventName || 'No Event Assigned',
           departmentName: request.departmentName || 'Unknown Department',
-          requestorName: request.requestorName || 'Unknown Requestor'
+          requestorName: request.requestorName || 'Unknown Requestor',
+          approvalNotes: request.approvalNotes || 'No Approval Notes'
         };
         
         // Extract participants from the request response
@@ -341,6 +342,7 @@ export class LdEditRequest implements OnInit {
         requestId: this.requestId,
         requestorId: this.requestDetails.requestorId,
         approvedBy: this.currentUserId, // Current LnD user who is making the changes
+        approvalNotes: this.requestDetails.approvalNotes || 'No Approval Notes',
         departmentId: this.requestDetails.departmentId,
         eventId: this.requestDetails.eventId || null, // Default to 0 if no event
         requestDate: this.requestDetails.requestDate,
@@ -348,7 +350,7 @@ export class LdEditRequest implements OnInit {
         groupRequest: this.requestDetails.groupRequest,
         justification: this.requestDetails.justification,
         curriculamLink: this.requestDetails.curriculumLink || '',
-        tan_Number: this.requestDetails.tanNumber,
+        tan_Number: this.requestDetails.tanNumber || '',
         requestedParticipants: this.participantsDetails.map(p => p.userId)
       };
 
@@ -358,16 +360,16 @@ export class LdEditRequest implements OnInit {
       this.requestService.editRequest(this.requestId, updatePayload).subscribe({
         next: (response: RequestDetails) => {
           console.log('Request updated successfully:', response);
-          this.isSubmitting = false;
           this.showSuccessMessage('Request updated successfully!');
           
           // Update local data with response
           this.requestDetails = response;
           
-          // Optional: Navigate back to dashboard after a short delay
+          // Keep showing loading state, then navigate after delay
           setTimeout(() => {
+            this.isSubmitting = false;
             this.navigateBack();
-          }, 2000);
+          }, 1000);
         },
         error: (error) => {
           console.error('Error updating request:', error);
@@ -428,8 +430,7 @@ export class LdEditRequest implements OnInit {
 
   isFormValid(): boolean {
     return !!(this.requestDetails?.justification && 
-              this.requestDetails?.tanNumber && 
               this.requestDetails?.requestStatus &&
-              this.participantsDetails.length > 0); // At least one participant required
+              this.participantsDetails.length > 0); // TAN is optional, at least one participant required
   }
 }

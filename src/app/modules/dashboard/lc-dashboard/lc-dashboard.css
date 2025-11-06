@@ -254,3 +254,58 @@ table tr {
     padding: 20px;
     background-color: #ffffff;
 }
+
+/* Status and Event Badge Styles */
+.status-badge, .event-badge {
+    padding: 6px 12px;
+    border-radius: 16px;
+    font-weight: 500;
+    font-size: 0.875rem;
+    letter-spacing: 0.3px;
+    display: inline-flex;
+    align-items: center;
+    line-height: 1;
+    white-space: nowrap;
+}
+
+.status-pending {
+    background-color: #fff8e6;
+    color: #975a16;
+    border: 1px solid #ffe4a1;
+}
+
+.status-approved {
+    background-color: #e6f6ed;
+    color: #0d6832;
+    border: 1px solid #a8e6c1;
+}
+
+.status-rejected {
+    background-color: #ffeef0;
+    color: #b3223b;
+    border: 1px solid #ffc1cc;
+}
+
+.status-cancelled {
+    background-color: #f3f4f6;
+    color: #4b5563;
+    border: 1px solid #d1d5db;
+}
+
+.status-completed {
+    background-color: #e7f5ff;
+    color: #0061a8;
+    border: 1px solid #a3d8ff;
+}
+
+.event-assigned {
+    background-color: #e6f6ed;
+    color: #0d6832;
+    border: 1px solid #a8e6c1;
+}
+
+.event-not-assigned {
+    background-color: #ffeef0;
+    color: #b3223b;
+    border: 1px solid #ffc1cc;
+}
