@@ -15,17 +15,14 @@ export class Request {
 
   constructor(private readonly http: HttpClient) { }
 
-  //API call to get request counts for a specific LC user ID
   getRequestCounts(lcUserId: number) {
     return this.http.get<RequestCounts>(`${this.API_BASE_URL_REQUEST}/counts/${lcUserId}`);
   }
 
-  //API call to get all requests counts for a LnD user ID
   getAllRequestCounts(lndUserId: number) {
     return this.http.get<RequestCounts>(`${this.API_BASE_URL_REQUEST}/all/counts/${lndUserId}`);
   }
 
-  //API call to get all requests for a specific LC user ID
   getRequests(
     lcUserId: number,
     status?: string,
@@ -55,7 +52,6 @@ export class Request {
     return this.http.get<RequestDetails[]>(`${this.API_BASE_URL_REQUEST}/${lcUserId}`, { params });
   }
 
-  //API call to get all requests for a  LnD user ID
   getAllRequests(
     lndUserId: number,
     status?: string,
@@ -93,12 +89,10 @@ export class Request {
     
   }
 
-  //API to create a new request
   createRequest(payload: CreateRequest): Observable<RequestDetails> {
     return this.http.post<RequestDetails>(`${this.API_BASE_URL_REQUEST}/create`, payload);
   }
 
-  // API to edit an existing request
   editRequest(requestId: number, payload: EditRequest): Observable<RequestDetails> {
     console.log('Request Service - editRequest called with:');
     console.log('Request ID:', requestId);
@@ -108,7 +102,6 @@ export class Request {
     return this.http.put<RequestDetails>(`${this.API_BASE_URL_REQUEST}/edit/${requestId}`, payload);
   }
 
-  //API to get a request details
   getRequest(requestId: number): Observable<RequestDetails> {
     return this.http.get<RequestDetails>(`${this.API_BASE_URL_REQUEST}/id/${requestId}`);
   }

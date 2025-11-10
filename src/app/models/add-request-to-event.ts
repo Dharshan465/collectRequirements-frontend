@@ -37,13 +37,13 @@ export interface EventDetails { // Renamed from Event to avoid conflict with add
 export interface addRequestToEvent {
   requestId: number;
   user: User; // NEW: Added the User object here
-  department: Department; // Nested object
-  event?: EventDetails; // Nested object, optional as it might not be assigned
-  requestDate: string; // Assuming date comes as a string (e.g., "2025-10-22")
+  department: Department; 
+  event?: EventDetails; 
+  requestDate: string;
   requestStatus: string;
   groupRequest: boolean;
   justification: string;
-  tan_Number: string; // Matches backend's "tan_Number"
-  curriculamLink: string; // Matches backend's "curriculamLink"
+  tan_Number: string; 
+  curriculamLink: string; 
   noOfParticipants: number;
 }

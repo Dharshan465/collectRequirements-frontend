@@ -19,10 +19,6 @@ export class UserService {
 
   }
 
-    /**
-   * Emits the list of users selected in the modal.
-   * @param users The list of UserParticipantDetails objects selected.
-   */
   notifyUsersSelected(users: UserParticipantDetails[]): void {
     this.selectedUsersSubject.next(users);
   }

@@ -1,7 +1,6 @@
-// src/app/modules/events/ld-events/ld-events.ts
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { LdEventsService, EventFilter } from '../../../service/events/ld-events-service';
-import { addEvent } from '../../../models/add-event'; // Updated import path and name
+import { addEvent } from '../../../models/add-event';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -19,7 +18,7 @@ import { Subject, debounceTime, distinctUntilChanged, Subscription } from 'rxjs'
   providers: [LdEventsService]
 })
 export class LdEvents implements OnInit, OnDestroy {
-  events: addEvent[] = []; // Use addEvent[]
+  events: addEvent[] = [];
   isLoading: boolean = true;
   errorMessage: string | null = null;
 
@@ -71,7 +70,7 @@ export class LdEvents implements OnInit, OnDestroy {
     }
 
     this.ldEventsService.getAllEvents(filters).subscribe({
-      next: (data: addEvent[]) => { // Use addEvent[]
+      next: (data: addEvent[]) => {
         this.events = data;
         this.isLoading = false;
       },
@@ -123,15 +122,11 @@ export class LdEvents implements OnInit, OnDestroy {
     }
   }
 
-  // inside LdEvents component class (ld-events.ts)
-
-// src/app/modules/events/ld-events/ld-events.ts
 navigateToDeleteEvent(id: number | undefined): void {
   if (id == null) {
     console.warn('navigateToDeleteEvent called without an id');
     return;
   }
-  // navigate to the route you actually defined
   this.router.navigate(['/events/delete', id]);
 }
 

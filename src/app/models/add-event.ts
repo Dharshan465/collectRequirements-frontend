@@ -5,7 +5,7 @@ export interface addEvent {
   eventName: string;
   description: string;
   participantsCount?: number; // Optional, as it's calculated by the backend
-  duration: number; // Assuming duration is a number (e.g., in minutes/hours)
+  duration: number; 
   eventType: string;
   fundingSource: string;
   status: string;

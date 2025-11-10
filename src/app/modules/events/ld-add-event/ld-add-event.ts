@@ -1,4 +1,3 @@
-// src/app/modules/events/ld-add-event/ld-add-event.ts
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -33,13 +32,11 @@ export class LdAddEvent implements OnInit, OnDestroy {
   };
 
   selectedRequests: addRequestToEvent[] = [];
-  // Master list of all new, approved, unassigned requests fetched from the API
   private allNewApprovedRequests: addRequestToEvent[] = [];
-  // The list currently displayed in the "Available Requests" table
   availableRequests: addRequestToEvent[] = [];
 
   requestSearchTerm: string = '';
-  searchById: boolean = true; // True for ID search, false for Name search
+  searchById: boolean = true;
 
   isLoading: boolean = false;
   submitError: string | null = null;
@@ -54,28 +51,23 @@ export class LdAddEvent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
-    // 1. Load the initial master list of all eligible requests
     this.loadAllNewApprovedRequests();
 
-    // 2. Subscribe to search term changes for filtering
     this.subscriptions.push(
       this.requestSearchTerms.pipe(
         debounceTime(300),
         distinctUntilChanged()
       ).subscribe(() => {
-        // Trigger the filtering logic whenever the search term changes (or is cleared)
         this.searchRequests();
       })
     );
   }
 
-  // Fetches the initial master list of all new, approved, unassigned requests
   loadAllNewApprovedRequests(): void {
     this.isLoading = true;
     this.ldAddEventService.getAllNewApprovedRequestsNotAssignedToEvent().subscribe({
       next: (requests: addRequestToEvent[]) => {
         this.allNewApprovedRequests = requests;
-        // After loading the master list, apply any existing search/selection filters
         this.searchRequests();
         this.isLoading = false;
       },
@@ -119,29 +111,23 @@ export class LdAddEvent implements OnInit, OnDestroy {
   }
 
   onSearchTermChange(term: string): void {
-    // Update the model to ensure it's in sync
     this.requestSearchTerm = term;
-    // Push the new term to the Subject; the subscription will handle debouncing and filtering
     this.requestSearchTerms.next(term);
   }
 
-  // Filters the master list (`allNewApprovedRequests`) to populate `availableRequests`
   searchRequests(): void {
     const term = this.requestSearchTerm.trim();
     this.searchError = null;
 
-    // Start with all requests from the master list that are not yet selected
     let currentAvailableRequests = this.allNewApprovedRequests.filter(req =>
       !this.selectedRequests.some(sReq => sReq.requestId === req.requestId)
     );
 
-    // If the search term is empty, display all currentAvailableRequests
     if (term === '') {
       this.availableRequests = currentAvailableRequests;
       return;
     }
 
-    // Otherwise, apply further filtering based on the search term
     const lowerCaseTerm = term.toLowerCase();
     let filteredRequests: addRequestToEvent[] = [];
 
@@ -157,7 +143,7 @@ export class LdAddEvent implements OnInit, OnDestroy {
       } else {
         this.searchError = 'Please enter a valid number for Request ID.';
       }
-    } else { // Search by name (e.g., requestor's name or justification)
+    } else {
       filteredRequests = currentAvailableRequests.filter(req =>
         (req.justification.toLowerCase().includes(lowerCaseTerm) ||
          (req.user?.firstName && req.user.firstName.toLowerCase().includes(lowerCaseTerm)) ||
@@ -173,7 +159,6 @@ export class LdAddEvent implements OnInit, OnDestroy {
   addRequestToSelection(request: addRequestToEvent): void {
     if (!this.selectedRequests.some(r => r.requestId === request.requestId)) {
       this.selectedRequests.push(request);
-      // Re-filter available requests after adding, to remove the selected item
       this.searchRequests();
     }
   }
@@ -183,11 +168,9 @@ export class LdAddEvent implements OnInit, OnDestroy {
     this.selectedRequests = this.selectedRequests.filter(req => req.requestId !== requestIdToRemove);
 
     if (removedRequest) {
-      // Add the request back to the master list if it was originally there
       if (!this.allNewApprovedRequests.some(r => r.requestId === removedRequest.requestId)) {
         this.allNewApprovedRequests.push(removedRequest);
       }
-      // Re-filter available requests after removing, to potentially show the item again
       this.searchRequests();
     }
   }
@@ -195,7 +178,7 @@ export class LdAddEvent implements OnInit, OnDestroy {
   clearSearch(): void {
     this.requestSearchTerm = '';
     this.searchError = null;
-    this.searchRequests(); // This will show all available requests
+    this.searchRequests();
   }
 
   // Add this method to handle the back navigation
