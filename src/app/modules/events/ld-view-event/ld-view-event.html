@@ -106,7 +106,15 @@
                             <td>{{ r.justification }}</td>
                             <td>{{ r.noOfAssociates || '-' }}</td>
                             <td>{{ r.tanNumber || '-' }}</td>
-                            <td>{{ r.curriculumLink || '-' }}</td>
+                            <td>
+                              <a *ngIf="r.curriculumLink" 
+                                 [href]="r.curriculumLink" 
+                                 target="_blank" 
+                                 class="curriculum-link">
+                                View Curriculum
+                              </a>
+                              <span *ngIf="!r.curriculumLink">-</span>
+                            </td>
                         </tr>
                     </tbody>
                 </table>

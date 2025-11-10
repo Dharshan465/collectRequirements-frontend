@@ -108,13 +108,29 @@
         <td>{{ request.requestId }}</td>
         <td>{{ request.requestorName }}</td>
         <td>{{ request.departmentName }}</td>
-        <td>{{ request.eventName || 'Not Assigned' }}</td>
+        <td>
+          <span class="event-badge" [class]="request.eventName ? 'event-assigned' : 'event-not-assigned'">
+            {{ request.eventName || 'Not Assigned' }}
+          </span>
+        </td>
         <td>{{ request.requestDate | date }}</td>
         <td>{{ request.groupRequest ? 'Yes' : 'No' }}</td>
-        <td>{{ request.requestStatus }}</td>
+        <td>
+           <span class="status-badge" [class]="'status-' + request.requestStatus.toLowerCase()">
+            {{ request.requestStatus }}
+          </span>
+        </td>
         <td>{{ request.noOfParticipants }}</td>
-        <td>{{ request.tanNumber }}</td>
-        <td>{{ request.curriculumLink }}</td>
+        <td>{{ request.tanNumber ? request.tanNumber : '-' }}</td>
+        <td>
+          <a *ngIf="request.curriculumLink" 
+             [href]="request.curriculumLink" 
+             target="_blank" 
+             class="curriculum-link">
+            View Curriculum
+          </a>
+          <span *ngIf="!request.curriculumLink">-</span>
+        </td>
         <td class="action-buttons-cell">
             <button class="action-btn edit-btn" (click)="onEdit(request.requestId)">Edit</button>
             <button class="action-btn view-btn" (click)="onView(request.requestId)">View</button>

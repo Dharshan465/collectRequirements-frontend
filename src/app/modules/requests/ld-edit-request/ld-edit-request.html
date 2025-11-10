@@ -107,7 +107,7 @@
       <h2>Request Status</h2>
       <div class="info-grid">
         <div class="info-item">
-          <label for="requestStatus">Status:</label>
+          <label for="requestStatus">Status: <span class="required">*</span></label>
           <select 
             id="requestStatus" 
             [(ngModel)]="requestDetails.requestStatus" 
@@ -124,6 +124,16 @@
             {{ requestDetails.requestStatus }}
           </span>
         </div>
+
+        <div class="info-item full-width">
+          <label for="approvalNotes">Approval Notes:</label>
+          <textarea 
+            id="approvalNotes" 
+            [(ngModel)]="requestDetails.approvalNotes" 
+            class="edit-textarea"
+            rows="3"
+            placeholder="Optional: Add any notes regarding the approval/rejection decision..."></textarea>
+        </div>
       </div>
     </section>
 
@@ -132,7 +142,7 @@
       <h2>Request Details</h2>
       <div class="info-grid">
         <div class="info-item full-width">
-          <label for="justification">Justification:</label>
+          <label for="justification">Justification: <span class="required">*</span></label>
           <textarea 
             id="justification" 
             [(ngModel)]="requestDetails.justification" 
@@ -143,24 +153,41 @@
         </div>
         
         <div class="info-item">
-          <label for="tanNumber">TAN Number:</label>
+          <label for="tanNumber">TAN Number: </label>
           <input 
             type="text" 
             id="tanNumber" 
             [(ngModel)]="requestDetails.tanNumber" 
             class="edit-input"
             placeholder="Enter TAN number"
-            required>
+>
         </div>
         
         <div class="info-item">
-          <label for="curriculumLink">Curriculum Link:</label>
-          <input 
-            type="url" 
-            id="curriculumLink" 
-            [(ngModel)]="requestDetails.curriculumLink" 
-            class="edit-input"
-            placeholder="Enter curriculum link URL">
+          <label for="curriculumLink">Curriculum Link: <span class="required">*</span></label>
+          <div class="curriculum-link-container">
+            <div *ngIf="requestDetails.curriculumLink" class="curriculum-display">
+              <a [href]="requestDetails.curriculumLink" 
+                 target="_blank" 
+                 class="curriculum-link">
+                View Curriculum
+              </a>
+              <button 
+                type="button" 
+                class="clear-link-btn" 
+                (click)="requestDetails.curriculumLink = ''">
+                ×
+              </button>
+            </div>
+            <input 
+              *ngIf="!requestDetails.curriculumLink"
+              type="url" 
+              id="curriculumLink" 
+              [(ngModel)]="requestDetails.curriculumLink" 
+              class="edit-input"
+              placeholder="Enter curriculum link URL"
+              required>
+          </div>
         </div>
       </div>
     </section>
@@ -255,7 +282,7 @@
       
       <div class="form-info">
         <p *ngIf="!isFormValid()" class="validation-message">
-          Please fill in all required fields (Justification, TAN Number, Status) and ensure at least one participant is added.
+          Please ensure: 1) Justification is filled, 2) Status is selected, and 3) At least one participant is added.
         </p>
       </div>
     </section>

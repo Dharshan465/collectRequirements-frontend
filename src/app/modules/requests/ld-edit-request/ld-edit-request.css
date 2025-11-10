@@ -291,38 +291,76 @@
 }
 
 /* Status Badge */
+.required {
+  color: #dc3545;
+  margin-left: 2px;
+  font-weight: bold;
+}
+
 .status-badge {
-  padding: 8px 16px;
-  border-radius: 20px;
-  font-weight: 600;
-  font-size: 14px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 16px;
+  font-weight: 500;
+  font-size: 0.875rem;
+  letter-spacing: 0.3px;
+  display: inline-flex;
+  align-items: center;
+  line-height: 1;
+  white-space: nowrap;
 }
 
 .status-pending {
-  background-color: #fff3cd;
-  color: #856404;
-  border: 1px solid #ffeaa7;
+  background-color: #fff8e6;
+  color: #b97800;
+  border: 1px solid #ffe4a1;
 }
 
 .status-approved {
-  background-color: #d4edda;
-  color: #155724;
-  border: 1px solid #c3e6cb;
+  background-color: #e6f6ed;
+  color: #0d6832;
+  border: 1px solid #a8e6c1;
 }
 
 .status-rejected {
-  background-color: #f8d7da;
-  color: #721c24;
-  border: 1px solid #f5c6cb;
+  background-color: #ffeef0;
+  color: #b3223b;
+  border: 1px solid #ffc1cc;
 }
 
-.status-under-review {
-  background-color: #d1ecf1;
-  color: #0c5460;
-  border: 1px solid #bee5eb;
+.status-cancelled {
+  background-color: #f3f4f6;
+  color: #4b5563;
+  border: 1px solid #d1d5db;
+}
+
+.status-completed {
+  background-color: #e7f5ff;
+  color: #0061a8;
+  border: 1px solid #a3d8ff;
+}
+
+.event-badge {
+  padding: 6px 12px;
+  border-radius: 16px;
+  font-weight: 500;
+  font-size: 0.875rem;
+  letter-spacing: 0.3px;
+  display: inline-flex;
+  align-items: center;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.event-assigned {
+  background-color: #e6f6ed;
+  color: #0d6832;
+  border: 1px solid #a8e6c1;
+}
+
+.event-not-assigned {
+  background-color: #ffeef0;
+  color: #b3223b;
+  border: 1px solid #ffc1cc;
 }
 
 /* Participants Management */
@@ -1030,4 +1068,56 @@
   .users-list {
     max-height: 300px;
   }
+}
+
+/* Curriculum Link Styles */
+.curriculum-link-container {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.curriculum-display {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  background-color: #f5f5f5;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  width: 100%;
+}
+
+.curriculum-link {
+  color: #1976d2;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-weight: 500;
+}
+
+.curriculum-link:hover {
+  text-decoration: underline;
+  color: #1565c0;
+}
+
+.clear-link-btn {
+  background: none;
+  border: none;
+  color: #666;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 0 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  min-width: 24px;
+  min-height: 24px;
+}
+
+.clear-link-btn:hover {
+  background-color: #e0e0e0;
+  color: #333;
 }

@@ -63,8 +63,13 @@ export class LcDashboard implements OnInit {
       this.filterToDate || undefined
     ).subscribe({
       next: (data) => {
-        this.allRequestDetails = data; // Store all requests for filter options
-        this.requestDetails = data; // Store all for template compatibility
+        // Sort data by requestDate in descending order (newest first)
+        const sortedData = data.sort((a, b) => 
+          new Date(b.requestDate).getTime() - new Date(a.requestDate).getTime()
+        );
+        
+        this.allRequestDetails = sortedData; // Store all requests for filter options
+        this.requestDetails = sortedData; // Store all for template compatibility
         this.applyMainViewFilter(); // Apply filtering for main view
         this.populateFilterOptions(); 
       },

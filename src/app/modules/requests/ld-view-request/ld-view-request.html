@@ -122,8 +122,8 @@
             <a *ngIf="requestDetails.curriculumLink; else noCurriculum" 
                [href]="requestDetails.curriculumLink" 
                target="_blank" 
-               class="link">
-              {{ requestDetails.curriculumLink }}
+               class="link curriculum-link">
+              View Curriculum
             </a>
             <ng-template #noCurriculum>Not provided</ng-template>
           </span>

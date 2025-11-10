@@ -57,7 +57,17 @@ export class LdNewRequest {
 
 
   onSubmit(): void {
-     this.requestService.createRequest(this.newRequest).subscribe({
+    if (this.selectedParticipantsDisplay.length === 0) {
+      alert('Please select at least one participant.');
+      return;
+    }
+    
+    if (!this.newRequest.justification?.trim()) {
+      alert('Please provide a justification.');
+      return;
+    }
+
+    this.requestService.createRequest(this.newRequest).subscribe({
       next: (response) => {
         console.log('Request created successfully:', response);
         alert('Request submitted successfully!');

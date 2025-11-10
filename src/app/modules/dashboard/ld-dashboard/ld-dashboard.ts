@@ -70,16 +70,21 @@ export class LdDashboard implements OnInit {
       this.filterToDate
     ).subscribe({
               next: (data) => {
+                // Sort data by requestDate in descending order (newest first)
+                const sortedData = data.sort((a, b) => 
+                  new Date(b.requestDate).getTime() - new Date(a.requestDate).getTime()
+                );
+
                 // Store all requests for filter options
-                this.allRequestDetails = data;
+                this.allRequestDetails = sortedData;
                 
                 // Filter out rejected requests unless specifically searching for them
                 if (!this.filterStatus || this.filterStatus.toUpperCase() !== 'REJECTED') {
-                  this.requestDetails = data.filter(request => 
+                  this.requestDetails = sortedData.filter(request => 
                     request.requestStatus.toUpperCase() !== 'REJECTED'
                   );
                 } else {
-                  this.requestDetails = data;
+                  this.requestDetails = sortedData;
                 }
                 this.populateFilterOptions();
       },
@@ -174,6 +179,7 @@ export class LdDashboard implements OnInit {
       requestId: this.requestToDelete,
       requestorId: request.requestorId,
       approvedBy: this.ldUserId, // Current LnD user
+      approvalNotes: request.approvalNotes || 'No Approval Notes',
       departmentId: request.departmentId,
       eventId: request.eventId || 0,
       requestDate: request.requestDate,
