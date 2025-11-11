@@ -33,11 +33,9 @@ body {
   min-height: 100%;
 }
 
-/* IMPORTANT: Apply flexbox properties to your root component's selector */
-/* Assuming your root component's selector is 'app-root' */
 app-root {
   display: flex;
   flex-direction: column;
-  min-height: 100vh; /* This makes <app-root> span the entire viewport height */
+  min-height: 100vh;
   overflow: hidden; 
 }

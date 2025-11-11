@@ -19,7 +19,6 @@ export class UserSelection implements OnInit {
   filteredUsers: UserParticipantDetails[] = [];
   selectedUsers: UserParticipantDetails[] = [];
 
-  // Filter object for multiple search criteria
   filters = {
     username: '',
     departmentName: '',
@@ -41,7 +40,6 @@ export class UserSelection implements OnInit {
   }
 
   applyFilter(): void {
-    // Check if any filter has a value
     const hasActiveFilters = this.filters.username || this.filters.departmentName || 
                            this.filters.managerName || this.filters.regionName;
 
@@ -59,7 +57,6 @@ export class UserSelection implements OnInit {
         const matchesRegion = !this.filters.regionName || 
           user.regionName.toLowerCase().includes(this.filters.regionName.toLowerCase());
 
-        // Return true only if ALL active filters match
         return matchesUsername && matchesDepartment && matchesManager && matchesRegion;
       });
     } else {

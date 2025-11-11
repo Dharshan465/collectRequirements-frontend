@@ -1,10 +1,8 @@
-// src/app/modules/events/ld-events/ld-events.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { addEvent } from '../../models/add-event'; // Updated import path and name
+import { addEvent } from '../../models/add-event';
 
-// Define an interface for the filter parameters
 export interface EventFilter {
   searchTerm?: string;
   description?: string;
@@ -20,12 +18,7 @@ export class LdEventsService {
 
   constructor(private http: HttpClient) { }
 
-  /**
-   * Fetches all events from the backend API, with optional filters.
-   * @param filters Optional object containing filter criteria.
-   * @returns An Observable that emits an array of addEvent objects.
-   */
-  getAllEvents(filters?: EventFilter): Observable<addEvent[]> { // Use addEvent[]
+  getAllEvents(filters?: EventFilter): Observable<addEvent[]> {
     let params = new HttpParams();
 
     if (filters) {
@@ -43,6 +36,6 @@ export class LdEventsService {
       }
     }
 
-    return this.http.get<addEvent[]>(this.apiUrl, { params }); // Use addEvent[]
+    return this.http.get<addEvent[]>(this.apiUrl, { params });
   }
 }
