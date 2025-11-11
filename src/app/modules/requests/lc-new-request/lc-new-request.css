@@ -372,4 +372,10 @@
   }
 }
 
+.note{
+  color: #666;
+  font-size: 0.85em;
+  font-style: italic;
+  margin-left: 2px;
+}
 

@@ -17,6 +17,7 @@ export class LdDashboard implements OnInit {
 
  private readonly ldUserId: number = 21; 
 
+ //declaring variables 
    filterStatus: string = '';
    filterRequestorName: string = '';
     filterDepartmentName: string = '';
@@ -27,7 +28,7 @@ export class LdDashboard implements OnInit {
   
     requestCounts: RequestCounts = {} as RequestCounts;
     requestDetails: RequestDetails[] = [];
-    allRequestDetails: RequestDetails[] = []; // Store all requests for filter options
+    allRequestDetails: RequestDetails[] = [];
 
   availableStatuses: string[] = [];
   availableDepartments: string[] = [];
@@ -70,7 +71,7 @@ export class LdDashboard implements OnInit {
       this.filterToDate
     ).subscribe({
               next: (data) => {
-                // Sort data by requestDate in descending order (newest first)
+                // Sort data by requestDate in descending order 
                 const sortedData = data.sort((a, b) => 
                   new Date(b.requestDate).getTime() - new Date(a.requestDate).getTime()
                 );
@@ -178,17 +179,17 @@ export class LdDashboard implements OnInit {
     const updatePayload: EditRequest = {
       requestId: this.requestToDelete,
       requestorId: request.requestorId,
-      approvedBy: this.ldUserId, // Current LnD user
+      approvedBy: this.ldUserId, 
       approvalNotes: request.approvalNotes || 'No Approval Notes',
       departmentId: request.departmentId,
-      eventId: request.eventId || 0,
+      eventId: request.eventId || null ,
       requestDate: request.requestDate,
-      requestStatus: 'REJECTED', // Change status to REJECTED for proper count tracking
+      requestStatus: 'REJECTED', 
       groupRequest: request.groupRequest,
       justification: request.justification,
       curriculamLink: request.curriculumLink || '',
       tan_Number: request.tanNumber,
-      requestedParticipants: [] // Empty array since we're rejecting
+      requestedParticipants: [] 
     };
 
     // Call the edit API to update status to REJECTED

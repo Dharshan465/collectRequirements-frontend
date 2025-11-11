@@ -9,8 +9,12 @@ import { Observable, Subject } from 'rxjs';
 export class UserService {
     private readonly API_BASE_URL_REQUEST = 'http://localhost:8080/requests';
 
+
+  // declaring a Subject to hold selected users
   private selectedUsersSubject = new Subject<UserParticipantDetails[]>();
-  selectedUsers$ = this.selectedUsersSubject.asObservable(); // Expose as Observable
+
+  //declaring an Observable for components to subscribe to selected users
+  selectedUsers$ = this.selectedUsersSubject.asObservable(); 
 
   constructor(private readonly http: HttpClient) { }
 
@@ -19,10 +23,6 @@ export class UserService {
 
   }
 
-    /**
-   * Emits the list of users selected in the modal.
-   * @param users The list of UserParticipantDetails objects selected.
-   */
   notifyUsersSelected(users: UserParticipantDetails[]): void {
     this.selectedUsersSubject.next(users);
   }

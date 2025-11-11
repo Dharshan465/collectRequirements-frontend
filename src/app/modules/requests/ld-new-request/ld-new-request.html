@@ -1,17 +1,14 @@
 <div class="add-event-container">
   <div class="header-section">
-    <h1>New Requirement</h1>
+    <h1>Requirement Details</h1>
     <button class="back-to-events-button" (click)="navigateBack()">Back to Dashboard</button>
   </div>
 
 <form (ngSubmit)="onSubmit()" #requestForm="ngForm">
-    <div class="form-group">
-      <label for="requestorId">Requestor ID:</label>
-      <input type="text" id="requestorId" [ngModel]="this.ldUserId" name="requestorId" readonly>
-    </div>
+  
 
     <div class="form-group">
-      <label for="justification">Justification: <span class="required">*</span></label>
+      <label for="justification">Requirement Description: <span class="required">*</span></label>
       <textarea id="justification" [(ngModel)]="newRequest.justification" name="justification" required></textarea>
     </div>
 
@@ -22,13 +19,15 @@
     </div>
 
     <div class="form-group">
-      <label for="tanNumber">TAN Number: <span class="required">*</span></label>
-      <input type="text" id="tanNumber" [(ngModel)]="newRequest.tanNumber" name="tanNumber" required>
+      <label for="tanNumber">TAN Number:</label>
+        <span class="note">Travel Allowance Number can be filled if sanctioned</span>
+      
+      <input type="text" id="tanNumber" [(ngModel)]="newRequest.tanNumber" name="tanNumber" >
     </div>
 
     <div class="form-group">
-      <label for="curriculumLink">Curriculum Link:</label>
-      <input type="url" id="curriculumLink" [(ngModel)]="newRequest.curriculumLink" name="curriculumLink">
+      <label for="curriculumLink">Curriculum Link: <span class="required">*</span></label>
+      <input type="url" id="curriculumLink" [(ngModel)]="newRequest.curriculumLink" name="curriculumLink" required>
     </div>
 
     <div class="form-group participant-selection">

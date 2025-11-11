@@ -280,8 +280,15 @@
 
 .required {
   color: #dc3545;
+    margin-left: 2px;
+    font-weight: bold;
+}
+
+.note{
+  color: #666;
+  font-size: 0.85em;
+  font-style: italic;
   margin-left: 2px;
-  font-weight: bold;
 }
 
 

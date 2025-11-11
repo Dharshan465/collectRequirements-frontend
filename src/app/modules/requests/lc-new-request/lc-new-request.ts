@@ -17,6 +17,8 @@ import { UserSelection } from '../../requests/user-selection/user-selection';
 })
 export class LcNewRequest implements OnInit, OnDestroy {
 
+  // Declaring variables
+
   newRequest: CreateRequest = {
     requestorId: this.lcUserId,
     justification: '',
@@ -30,8 +32,7 @@ export class LcNewRequest implements OnInit, OnDestroy {
   selectedParticipantsDisplay: UserParticipantDetails[] = [];
   showUserSelectionPopup: boolean = false; 
 
-    private userSelectionSubscription: Subscription | undefined; // For modal communication
-
+  private userSelectionSubscription: Subscription | undefined; 
 
   constructor(
     private readonly requestService: Request,
@@ -43,8 +44,8 @@ export class LcNewRequest implements OnInit, OnDestroy {
   ngOnInit(): void {
       this.userSelectionSubscription = this.userService.selectedUsers$.subscribe(users => {
       this.selectedParticipantsDisplay = users;
-      this.newRequest.participantUserIds = users.map(user => user.userId); // Update IDs for submission
-      this.updateGroupRequestStatus(); // Automatically update group request status
+      this.newRequest.participantUserIds = users.map(user => user.userId);
+      this.updateGroupRequestStatus(); 
     });
 
  
@@ -59,7 +60,6 @@ export class LcNewRequest implements OnInit, OnDestroy {
      this.requestService.createRequest(this.newRequest).subscribe({
       next: (response) => {
         console.log('Request created successfully:', response);
-        alert('Request submitted successfully!');
         this.router.navigate(['/dashboard/lc/' + this.lcUserId]);
       },
       error: (err) => {
@@ -85,7 +85,7 @@ get lcUserId(): number {
   onModalSelectionConfirmed(selectedUsers: UserParticipantDetails[]): void {
     this.selectedParticipantsDisplay = selectedUsers;
     this.newRequest.participantUserIds = selectedUsers.map(user => user.userId);
-    this.updateGroupRequestStatus(); // Automatically update group request status
+    this.updateGroupRequestStatus(); 
     this.showUserSelectionPopup = false;
   }
 
@@ -96,7 +96,7 @@ get lcUserId(): number {
   removeParticipant(userId: number): void{
     this.selectedParticipantsDisplay = this.selectedParticipantsDisplay.filter(user => user.userId !== userId);
     this.newRequest.participantUserIds = this.newRequest.participantUserIds.filter(id => id !== userId);
-    this.updateGroupRequestStatus(); // Automatically update group request status
+    this.updateGroupRequestStatus(); 
     console.log('Removing participant with userId:', userId);
   }
 

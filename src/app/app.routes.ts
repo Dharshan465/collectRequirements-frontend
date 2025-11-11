@@ -17,6 +17,7 @@ export const routes: Routes = [
     { path :'dashboard/ld/:id',component:LdDashboard},
     { path: 'dashboard/lc/:id/create', component: LcNewRequest },
     { path: 'dashboard/ld/:id/create', component: LdNewRequest },
+
     {path:'ld-events',component: LdEvents},
     {path:'ld-add-event', component: LdAddEvent},
     { path: 'events/view/:id', component: LdViewEventComponent },
@@ -25,5 +26,6 @@ export const routes: Routes = [
     { path: 'requests/edit/:id', component: LdEditRequest },
     { path: 'requests/view/:id', component: LdViewRequest },
     { path: 'requests/delete/:id', component: LdDeleteRequest },
+
     { path: '', redirectTo: 'dashboard/lc/16', pathMatch: 'full' }
 ];

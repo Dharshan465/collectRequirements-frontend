@@ -78,7 +78,7 @@
     <table>
       <thead>
         <tr>
-          <th>Request ID</th>
+          <th>Requirement</th>
           <th>Department</th>
           <th>Event</th>
           <th>Date</th>
@@ -91,7 +91,7 @@
       </thead>
       <tbody>
         <tr *ngFor="let request of filteredRequestDetails">
-        <td>{{ request.requestId }}</td>
+        <td>{{ request.justification }}</td>
         <td>{{ request.departmentName }}</td>
         <td>
           <span class="event-badge" [class]="request.eventName ? 'event-assigned' : 'event-not-assigned'">

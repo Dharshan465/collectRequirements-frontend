@@ -70,7 +70,6 @@ export class LdNewRequest {
     this.requestService.createRequest(this.newRequest).subscribe({
       next: (response) => {
         console.log('Request created successfully:', response);
-        alert('Request submitted successfully!');
         this.router.navigate(['/dashboard/ld/' + this.ldUserId]);
       },
       error: (err) => {

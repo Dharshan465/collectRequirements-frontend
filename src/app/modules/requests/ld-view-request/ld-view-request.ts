@@ -152,7 +152,7 @@ export class LdViewRequest implements OnInit {
   }
 
   navigateBack(): void {
-    this.router.navigate(['/dashboard/ld/21']); // Navigate back to LD dashboard
+    this.router.navigate(['/dashboard/ld/21']);
   }
 
   getStatusBadgeClass(status: string): string {
@@ -172,18 +172,5 @@ export class LdViewRequest implements OnInit {
     }
   }
 
-  getPriorityClass(priority: string): string {
-    switch (priority?.toLowerCase()) {
-      case 'low':
-        return 'priority-low';
-      case 'medium':
-        return 'priority-medium';
-      case 'high':
-        return 'priority-high';
-      case 'critical':
-        return 'priority-critical';
-      default:
-        return 'priority-default';
-    }
-  }
+
 }

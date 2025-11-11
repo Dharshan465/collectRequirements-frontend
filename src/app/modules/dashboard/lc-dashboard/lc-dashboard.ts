@@ -6,16 +6,18 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 
-
 @Component({
   selector: 'app-lc-dashboard',
   imports: [CommonModule, FormsModule],
   templateUrl: './lc-dashboard.html',
   styleUrls: ['./lc-dashboard.css'],
 })
+
 export class LcDashboard implements OnInit {
 
   private readonly lcUserId: number = 16;
+
+  //declaring variables
 
   filterStatus: string = '';
   filterDepartmentName: string = '';
@@ -29,8 +31,8 @@ export class LcDashboard implements OnInit {
 
   requestCounts: RequestCounts = {} as RequestCounts;
   requestDetails: RequestDetails[] = [];
-  filteredRequestDetails: RequestDetails[] = []; // For display
-  allRequestDetails: RequestDetails[] = []; // For maintaining filter options
+  filteredRequestDetails: RequestDetails[] = []; 
+  allRequestDetails: RequestDetails[] = []; 
 
   constructor(private readonly requestService: Request) { }
 
@@ -68,9 +70,9 @@ export class LcDashboard implements OnInit {
           new Date(b.requestDate).getTime() - new Date(a.requestDate).getTime()
         );
         
-        this.allRequestDetails = sortedData; // Store all requests for filter options
-        this.requestDetails = sortedData; // Store all for template compatibility
-        this.applyMainViewFilter(); // Apply filtering for main view
+        this.allRequestDetails = sortedData;
+        this.requestDetails = sortedData; 
+        this.applyMainViewFilter(); 
         this.populateFilterOptions(); 
       },
       error: (err) => console.error(`Error fetching requests for LC User ID: ${this.lcUserId}`, err)
@@ -126,7 +128,6 @@ export class LcDashboard implements OnInit {
     this.loadRequests(); 
   }
 
-  // Method to refresh the main view filter when filters change
   onFilterChange(): void {
     this.loadRequests();
   }
